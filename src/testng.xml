@@ -1,0 +1,7 @@
+<!-- testng.xml -->
+<suite name="Regression Suite" parallel="tests" thread-count="3">
+  <test name="Name">
+    <classes>
+    </classes>
+  </test>
+</suite>
