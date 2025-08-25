@@ -7,10 +7,12 @@ import java.util.logging.SimpleFormatter;
 
 public class LoggerUtil {
 
-  private LoggerUtil() {}
+  private LoggerUtil() {
+  }
 
   /**
    * Get a configured logger for a class.
+   *
    * @param clazz Class requesting the logger
    * @return Logger instance
    */

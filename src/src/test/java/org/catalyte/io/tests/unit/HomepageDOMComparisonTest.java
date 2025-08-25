@@ -1,5 +1,7 @@
 package org.catalyte.io.tests.unit;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Set;
 import org.catalyte.io.utils.LoggerUtil;
 import org.jsoup.Jsoup;
@@ -9,15 +11,15 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.*;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 public class HomepageDOMComparisonTest {
-  private WebDriver driver;
+
   private static final java.util.logging.Logger logger = LoggerUtil.getLogger(
       HomepageDOMComparisonTest.class);
+  private WebDriver driver;
 
   @BeforeClass
   public void setUp() {
@@ -38,7 +40,9 @@ public class HomepageDOMComparisonTest {
 
     // 1. Page title check (warning only)
     if (!updated.title().equals(baseline.title())) {
-      logger.warning("Warning: Page title changed from \"" + baseline.title() + "\" to \"" + updated.title() + "\"");
+      logger.warning(
+          "Warning: Page title changed from \"" + baseline.title() + "\" to \"" + updated.title()
+              + "\"");
     }
 
     // 2. Critical IDs with threshold
@@ -52,7 +56,8 @@ public class HomepageDOMComparisonTest {
       }
     }
     double missingPercent = (missingCriticalIds * 100.0) / criticalIds.size();
-    Assert.assertTrue(missingPercent < 50, "Too many critical elements missing! Missing " + missingPercent + "%");
+    Assert.assertTrue(missingPercent < 50,
+        "Too many critical elements missing! Missing " + missingPercent + "%");
 
     // 3. Text content check (lenient partial match)
     Elements baselineTexts = baseline.select("h1, h2, h3, button, a");
@@ -60,7 +65,9 @@ public class HomepageDOMComparisonTest {
     for (Element e : baselineTexts) {
       String text = e.text().trim();
       if (!text.isEmpty()) {
-        boolean exists = updated.select("*:containsOwn(" + text.substring(0, Math.min(10, text.length())) + ")").size() > 0;
+        boolean exists =
+            updated.select("*:containsOwn(" + text.substring(0, Math.min(10, text.length())) + ")")
+                .size() > 0;
         if (!exists) {
           logger.warning("Warning: Text might have changed or missing: \"" + text + "\"");
           missingTextCount++;
@@ -76,7 +83,9 @@ public class HomepageDOMComparisonTest {
     int baselineSections = baseline.select("header, nav, main, footer").size();
     int updatedSections = updated.select("header, nav, main, footer").size();
     if (baselineSections != updatedSections) {
-      logger.warning("Warning: Number of major sections changed: baseline=" + baselineSections + ", live=" + updatedSections);
+      logger.warning(
+          "Warning: Number of major sections changed: baseline=" + baselineSections + ", live="
+              + updatedSections);
     }
   }
 

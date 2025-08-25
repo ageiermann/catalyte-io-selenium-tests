@@ -5,10 +5,12 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigUtil {
+
   private static final Properties props = new Properties();
 
   static {
-    try (InputStream input = ConfigUtil.class.getClassLoader().getResourceAsStream("test.properties")) {
+    try (InputStream input = ConfigUtil.class.getClassLoader()
+        .getResourceAsStream("test.properties")) {
       if (input == null) {
         throw new RuntimeException("Cannot find test.properties in resources");
       }
@@ -20,7 +22,9 @@ public class ConfigUtil {
 
   public static double getThreshold(String key, double defaultValue) {
     String value = props.getProperty(key);
-    if (value == null) return defaultValue;
+    if (value == null) {
+      return defaultValue;
+    }
     try {
       return Double.parseDouble(value.trim());
     } catch (NumberFormatException e) {

@@ -1,12 +1,29 @@
 package org.catalyte.io.pages;
 
-import java.time.Duration;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePage extends Page {
 
+  private final WebDriver driver;
+  private final By accordionTalent = By.id("what-if-i-need-more-than-apprentice-talent");
+  private final By industriesAccordion = By.id("what-industries-do-you-provide-talent-for");
+  private final By hireAccordion = By.id("how-can-i-hire-catalyte-talent");
+
   public HomePage(WebDriver driver) {
     super(driver);
+    this.driver = driver;
+  }
+
+  public boolean isAccordionTalentVisible() {
+    return driver.findElement(accordionTalent).isDisplayed();
+  }
+
+  public boolean isIndustriesVisible() {
+    return driver.findElement(industriesAccordion).isDisplayed();
+  }
+
+  public boolean isHireAccordionVisible() {
+    return driver.findElement(hireAccordion).isDisplayed();
   }
 }

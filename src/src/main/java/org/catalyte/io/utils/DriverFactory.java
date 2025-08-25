@@ -2,10 +2,11 @@ package org.catalyte.io.utils;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class DriverFactory {
+
   private static WebDriver driver;
 
   public static WebDriver getDriver(String browser) {

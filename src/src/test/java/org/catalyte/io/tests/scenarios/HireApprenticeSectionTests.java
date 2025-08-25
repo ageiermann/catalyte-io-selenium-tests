@@ -8,15 +8,17 @@ import org.catalyte.io.utils.LoggerUtil;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 public class HireApprenticeSectionTests {
 
-  private WebDriver driver;
-  private HirePage hire;
   private static final java.util.logging.Logger logger = LoggerUtil.getLogger(
       HireApprenticeSectionTests.class);
-
+  private WebDriver driver;
+  private HirePage hire;
   private List<String> warnings;
   private int totalChecks;
 
@@ -103,6 +105,7 @@ public class HireApprenticeSectionTests {
 
   @FunctionalInterface
   private interface Checkable {
+
     boolean check();
   }
 }
