@@ -10,10 +10,7 @@ import org.openqa.selenium.WebElement;
  */
 public class HirePage {
 
-  private final WebDriver driver;
-  /**
-   * Locators
-   */
+  /* Locators */
 
   // Hero / text editor sections
   private final By textEditors = By.cssSelector(".elementor-widget-text-editor p");
@@ -33,13 +30,13 @@ public class HirePage {
   // Menu text
   private final By menuText = By.cssSelector(".menu-text");
 
+  private final WebDriver driver;
+
   public HirePage(WebDriver driver) {
     this.driver = driver;
   }
 
-  /**
-   * Actions and Assertions
-   */
+  /* Actions and Assertions */
 
   // Get all paragraph texts from text editor widgets
   public List<WebElement> getTextEditors() {

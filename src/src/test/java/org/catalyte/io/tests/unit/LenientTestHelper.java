@@ -6,11 +6,11 @@ import java.util.function.BooleanSupplier;
 import org.testng.Assert;
 
 /**
- * This helper class checks an element safely without failing the whole test immediately. It then
+ * This class checks an element safely without failing the whole test immediately. It then
  * waits until the end of a test to decide if failures are acceptable. At the end of the test, it
  * resets.
  */
-public abstract class LenientTestBase {
+public abstract class LenientTestHelper {
 
   private final List<String> missingElements = new ArrayList<>();
 

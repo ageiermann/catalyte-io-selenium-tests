@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 /**
  * Lenient default tests for Base Page object using the LenientTestBase class.
  */
-public class BaseTests extends LenientTestBase {
+public class BaseTests extends LenientTestHelper {
 
   private WebDriver driver;
   private HomePage home;
