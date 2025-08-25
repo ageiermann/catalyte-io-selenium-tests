@@ -14,9 +14,10 @@ import org.testng.annotations.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DOMComparisonTest {
+public class HomepageDOMComparisonTest {
   private WebDriver driver;
-  private static final java.util.logging.Logger logger = LoggerUtil.getLogger(DOMComparisonTest.class);
+  private static final java.util.logging.Logger logger = LoggerUtil.getLogger(
+      HomepageDOMComparisonTest.class);
 
   @BeforeClass
   public void setUp() {
