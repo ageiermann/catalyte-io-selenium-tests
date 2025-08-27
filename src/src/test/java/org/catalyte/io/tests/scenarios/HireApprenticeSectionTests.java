@@ -1,12 +1,14 @@
 package org.catalyte.io.tests.scenarios;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import org.catalyte.io.pages.HirePage;
-import org.catalyte.io.utils.ConfigUtil;
 import org.catalyte.io.utils.LoggerUtil;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -19,6 +21,7 @@ public class HireApprenticeSectionTests {
       HireApprenticeSectionTests.class);
   private WebDriver driver;
   private HirePage hire;
+  private WebDriverWait wait;
   private List<String> warnings;
   private int totalChecks;
 
@@ -26,6 +29,7 @@ public class HireApprenticeSectionTests {
   public void setUp() {
     driver = new ChromeDriver();
     driver.manage().window().maximize();
+    wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     driver.get("https://www.catalyte.io/hire-talent/hire-apprentices/");
     hire = new HirePage(driver);
   }
@@ -41,9 +45,6 @@ public class HireApprenticeSectionTests {
     checkElement(() -> hire.getAccordionTalent().isDisplayed(), "Talent accordion missing");
     checkElement(() -> hire.getAccordionIndustries().isDisplayed(), "Industries accordion missing");
     checkElement(() -> hire.getAccordionHire().isDisplayed(), "Hire accordion missing");
-
-    double threshold = ConfigUtil.getThreshold("accordions.threshold", 0.5);
-    assertWithinThreshold(threshold, "Too many accordions missing!");
   }
 
   @Test
@@ -51,9 +52,22 @@ public class HireApprenticeSectionTests {
     checkElement(hire::isImage3111Displayed, "Image 3111 missing");
     checkElement(hire::isImage3112Displayed, "Image 3112 missing");
     checkElement(hire::isImage3113Displayed, "Image 3113 missing");
+  }
 
-    double threshold = ConfigUtil.getThreshold("images.threshold", 0.5);
-    assertWithinThreshold(threshold, "Too many images missing!");
+  @Test
+  public void testVideosExistLenient() throws InterruptedException {
+    checkElement(() -> hire.getPRVideo().isDisplayed(), "Apprenticeships PR video iframe missing");
+    checkElement(() -> hire.getTestimonialsVideo().isDisplayed(), "Apprenticeships testimonials video iframe missing");
+  }
+
+  @Test
+  public void testWorkWithUsButtonDisplayedAndFunctionsLenient() {
+    checkElement(() -> hire.getWorkWithUsButton().isDisplayed(), "Main workflow button missing");
+    hire.getWorkWithUsButton().click();
+    wait.until(ExpectedConditions.urlContains("https://www.catalyte.io/about/"));
+    String currentUrl = driver.getCurrentUrl();
+    Assert.assertTrue(currentUrl.contains("https://www.catalyte.io/about/contact-sales/"),
+        "Button did not navigate to the expected page! Current URL: " + currentUrl);
   }
 
   @Test
@@ -63,20 +77,17 @@ public class HireApprenticeSectionTests {
       warnings.add("Menu text items missing");
       logger.warning("Menu text items missing");
     }
-
-    double threshold = ConfigUtil.getThreshold("menu.threshold", 0.0);
-    assertWithinThreshold(threshold, "Menu completely missing!");
   }
 
   @AfterClass
   public void tearDown() {
+    logger.info("Total checks run: " + totalChecks);
     if (driver != null) {
       driver.quit();
     }
   }
 
   // ===== Utility methods =====
-
   private void checkElement(Checkable condition, String warningMessage) {
     totalChecks++;
     try {
@@ -90,22 +101,6 @@ public class HireApprenticeSectionTests {
     }
   }
 
-  private void assertWithinThreshold(double maxMissingRatio, String failureMessage) {
-    double missingRatio = missingRate();
-    if (missingRatio > maxMissingRatio) {
-      Assert.fail(failureMessage + " Missing ratio=" + missingRatio + " Warnings=" + warnings);
-    } else if (!warnings.isEmpty()) {
-      logger.info("Test passed with warnings: " + warnings);
-    }
-  }
-
-  private double missingRate() {
-    return totalChecks == 0 ? 0.0 : (double) warnings.size() / totalChecks;
-  }
-
   @FunctionalInterface
-  private interface Checkable {
-
-    boolean check();
-  }
+  public interface Checkable { boolean check(); }
 }

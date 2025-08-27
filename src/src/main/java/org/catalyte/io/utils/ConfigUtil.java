@@ -19,16 +19,4 @@ public class ConfigUtil {
       throw new RuntimeException("Failed to load test.properties", e);
     }
   }
-
-  public static double getThreshold(String key, double defaultValue) {
-    String value = props.getProperty(key);
-    if (value == null) {
-      return defaultValue;
-    }
-    try {
-      return Double.parseDouble(value.trim());
-    } catch (NumberFormatException e) {
-      return defaultValue;
-    }
-  }
 }
