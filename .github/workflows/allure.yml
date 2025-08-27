@@ -3,7 +3,7 @@ name: Selenium Test + Allure Report
 on:
   push:
     branches:
-      - main
+      - main  # or your main development branch
 
 jobs:
   test-and-report:
@@ -14,11 +14,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Set up Java
+      # 2. Set up Java 17
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'   # REQUIRED in v3
           java-version: '17'
+          cache: 'maven'
 
       # 3. Install Chrome and ChromeDriver (for Selenium)
       - name: Install Chrome
@@ -40,5 +42,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./target/site/allure-maven-plugin
-          # Optional: commit message
           commit_message: "Deploy Allure report from GitHub Actions"
