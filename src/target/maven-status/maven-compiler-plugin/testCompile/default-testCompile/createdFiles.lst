@@ -1,0 +1,5 @@
+org\catalyte\io\utils\ScreenshotUtil.class
+org\catalyte\io\tests\scenarios\HireApprenticeSectionTests.class
+org\catalyte\io\utils\TestListener.class
+org\catalyte\io\tests\unit\HomepageDOMComparisonTest.class
+org\catalyte\io\tests\scenarios\HireApprenticeSectionTests$Checkable.class

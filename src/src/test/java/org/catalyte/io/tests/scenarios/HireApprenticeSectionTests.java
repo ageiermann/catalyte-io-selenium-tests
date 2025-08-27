@@ -1,10 +1,12 @@
 package org.catalyte.io.tests.scenarios;
 
+import io.qameta.allure.testng.AllureTestNg;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import org.catalyte.io.pages.HirePage;
 import org.catalyte.io.utils.LoggerUtil;
+import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,7 +16,9 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.annotations.Listeners;
 
+@Listeners({AllureTestNg.class, TestListener.class})
 public class HireApprenticeSectionTests {
 
   private static final java.util.logging.Logger logger = LoggerUtil.getLogger(
@@ -28,6 +32,7 @@ public class HireApprenticeSectionTests {
   @BeforeClass
   public void setUp() {
     driver = new ChromeDriver();
+    TestListener.setDriver(driver);
     driver.manage().window().maximize();
     wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     driver.get("https://www.catalyte.io/hire-talent/hire-apprentices/");
