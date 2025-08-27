@@ -31,6 +31,7 @@ jobs:
       # 4. Run tests with Maven
       - name: Run Selenium tests
         run: mvn clean test
+        working-directory: ./src
 
       # 5. Generate Allure report
       - name: Generate Allure report
