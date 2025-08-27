@@ -40,7 +40,7 @@ jobs:
 
       # 6️⃣ Verify Allure report files exist
       - name: List Allure report files
-        run: ls -R ./catalyte-io-selenium-tests/target/site/allure-maven-plugin
+        run: ls -R ./src/target/site/allure-maven-plugin
 
       # 7️⃣ Deploy Allure report to GitHub Pages
       - name: Deploy Allure report to GitHub Pages
