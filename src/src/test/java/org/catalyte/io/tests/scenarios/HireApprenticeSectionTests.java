@@ -1,16 +1,12 @@
 package org.catalyte.io.tests.scenarios;
 
 import io.qameta.allure.testng.AllureTestNg;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import org.catalyte.io.pages.HirePage;
 import org.catalyte.io.utils.LoggerUtil;
 import org.catalyte.io.utils.TestListener;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -19,23 +15,19 @@ import org.testng.annotations.Test;
 import org.testng.annotations.Listeners;
 
 @Listeners({AllureTestNg.class, TestListener.class})
-public class HireApprenticeSectionTests {
+public class HireApprenticeSectionTests extends BaseUiTest{
 
   private static final java.util.logging.Logger logger = LoggerUtil.getLogger(
       HireApprenticeSectionTests.class);
-  private WebDriver driver;
   private HirePage hire;
-  private WebDriverWait wait;
   private List<String> warnings;
   private int totalChecks;
 
-  @BeforeClass
-  public void setUp() {
-    driver = new ChromeDriver();
-    TestListener.setDriver(driver);
-    driver.manage().window().maximize();
-    wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    driver.get("https://www.catalyte.io/hire-talent/hire-apprentices/");
+  @BeforeClass(alwaysRun = true)
+  @Override
+  public void setUpBase() throws Exception {
+    super.setUpBase();
+    open("https://www.catalyte.io/hire-talent/hire-apprentices/");
     hire = new HirePage(driver);
   }
 
