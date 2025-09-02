@@ -58,9 +58,19 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
-          <suiteXmlFiles>
-            <suiteXmlFile>testng.xml</suiteXmlFile>
-          </suiteXmlFiles>
+          <includes>
+            <include>**/*Test.java</include>
+            <include>**/*Tests.java</include>
+          </includes>
+          <!-- Allure TestNG listener -->
+          <properties>
+            <property>
+              <name>listener</name>
+              <value>io.qameta.allure.testng.AllureTestNg</value>
+            </property>
+          </properties>
+          <!-- IMPORTANT: do NOT let an empty testng.xml be auto-used -->
+          <suiteXmlFiles combine.children="append"/>
         </configuration>
       </plugin>
 
