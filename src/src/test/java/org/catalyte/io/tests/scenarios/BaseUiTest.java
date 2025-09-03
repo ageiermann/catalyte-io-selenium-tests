@@ -1,9 +1,11 @@
 package org.catalyte.io.tests.scenarios;
 
 import io.qameta.allure.Attachment;
+import io.qameta.allure.testng.AllureTestNg;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -15,7 +17,9 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 
+@Listeners({AllureTestNg.class, TestListener.class})
 public abstract class BaseUiTest {
 
   protected WebDriver driver;

@@ -45,7 +45,7 @@ jobs:
           for f in ./src/target/allure-results/*-container.json; do
           jq -r --arg name "setUpBase" 'select(.befores) | .befores[]? | select(.name==$name) | "\(.name) -> \(.status) in " + input_filename' "$f" 2>/dev/null || true
           done
-          
+
       # 5) Debug: verify Allure results exist
       - name: Debug Allure results
         if: always()

@@ -5,10 +5,11 @@ import java.util.List;
 
 import org.catalyte.io.pages.ApprenticeshipsPage;
 import org.catalyte.io.utils.LoggerUtil;
+import org.catalyte.io.utils.TestListener;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 
-@Listeners({AllureTestNg.class})
+@Listeners({AllureTestNg.class, TestListener.class})
 public class ApprenticeshipsPageTests extends BaseUiTest {
 
   private static final java.util.logging.Logger logger = LoggerUtil.getLogger(
