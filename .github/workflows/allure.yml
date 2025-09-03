@@ -2,22 +2,21 @@ name: Selenium Test + Allure Report Deployment
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+
+permissions:
+  contents: write  # required for gh-pages deploy
 
 jobs:
   test-and-deploy:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write  # required by gh-pages action
-
     steps:
       # 1) Checkout
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # 2) Set up JDK 17
+      # 2) Java
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -25,45 +24,37 @@ jobs:
           java-version: '17'
           cache: maven
 
-      # 3) Install Chrome & Chromedriver (reliable actions)
+      # 3) Stable Chrome + Chromedriver
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
       - name: Set up ChromeDriver
         uses: nanasess/setup-chromedriver@v2
 
-      # 4) Run Maven tests (your pom is under ./src)
+      # 4) Run tests (pom.xml is under ./src)
       - name: Run Selenium tests
         run: mvn -q -DskipTests=false clean test
         working-directory: ./src
 
-      - name: Check for broken setUpBase in this run
-        if: always()
-        run: |
-          echo "Any 'broken' setUpBase in allure-results?"
-          grep -R "\"name\":\"setUpBase\"" -n ./src/target/allure-results || true
-          # list statuses for every setUpBase across all containers
-          for f in ./src/target/allure-results/*-container.json; do
-          jq -r --arg name "setUpBase" 'select(.befores) | .befores[]? | select(.name==$name) | "\(.name) -> \(.status) in " + input_filename' "$f" 2>/dev/null || true
-          done
-
-      # 5) Debug: verify Allure results exist
+      # 5) Sanity: do we have fresh Allure results?
       - name: Debug Allure results
         if: always()
         run: |
+          echo "target dir:"
           ls -la ./src/target || true
+          echo "allure-results:"
           ls -la ./src/target/allure-results || true
-          echo "Result files:" $(find ./src/target/allure-results -type f | wc -l || true)
+          echo "file count:" $(find ./src/target/allure-results -type f | wc -l || true)
 
-      # 6) Generate Allure report with Maven plugin
+      # 6) Generate Allure report (Maven plugin)
       - name: Generate Allure report
         run: mvn -q allure:report
         working-directory: ./src
 
-      # 7) Deploy Allure report to GitHub Pages
+      # 7) Deploy to GitHub Pages (fresh publish to avoid stale history)
       - name: Deploy Allure report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./src/target/site/allure-maven-plugin
-          destination_dir: .
-          commit_message: "Deploy Allure report from GitHub Actions"
+          force_orphan: true
+          commit_message: "Allure report"

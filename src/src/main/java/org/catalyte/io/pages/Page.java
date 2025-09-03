@@ -17,7 +17,7 @@ public class Page {
       throw new IllegalArgumentException("WebDriver must not be null");
     }
     this.driver = driver;
-    this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
   }
 
   protected WebElement find(By locator) {

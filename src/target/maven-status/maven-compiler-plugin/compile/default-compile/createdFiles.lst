@@ -1,6 +1,7 @@
-org\catalyte\io\utils\ConfigUtil.class
+org\catalyte\io\pages\ApprenticeshipsPage.class
 org\catalyte\io\pages\HomePage.class
 org\catalyte\io\pages\Page.class
+org\catalyte\io\utils\ConfigUtil.class
 org\catalyte\io\utils\LoggerUtil.class
 org\catalyte\io\pages\HirePage.class
 org\catalyte\io\utils\DriverFactory.class

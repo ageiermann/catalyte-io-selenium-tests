@@ -4,6 +4,7 @@ import io.qameta.allure.testng.AllureTestNg;
 import java.util.List;
 
 import org.catalyte.io.pages.ApprenticeshipsPage;
+import org.catalyte.io.tests.unit.BaseUiTest;
 import org.catalyte.io.utils.LoggerUtil;
 import org.catalyte.io.utils.TestListener;
 import org.testng.annotations.*;
@@ -17,12 +18,11 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
   private ApprenticeshipsPage page;
 
   @BeforeClass(alwaysRun = true)
-  @Override
-  public void setUpBase() throws Exception {
-    super.setUpBase();
+  public void setUpPages() {
+    if (driver == null) throw new IllegalStateException("Driver is null in setUpPages()");
     open("https://www.catalyte.io/apprenticeships/");
     page = new ApprenticeshipsPage(driver);
-    page.waitForCards(2); // initial stabilization
+    page.waitForCards(2);
   }
 
   @Test

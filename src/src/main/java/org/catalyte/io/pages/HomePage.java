@@ -5,14 +5,12 @@ import org.openqa.selenium.WebDriver;
 
 public class HomePage extends Page {
 
-  private final WebDriver driver;
   private final By accordionTalent = By.id("what-if-i-need-more-than-apprentice-talent");
   private final By industriesAccordion = By.id("what-industries-do-you-provide-talent-for");
   private final By hireAccordion = By.id("how-can-i-hire-catalyte-talent");
 
   public HomePage(WebDriver driver) {
     super(driver);
-    this.driver = driver;
   }
 
   public boolean isAccordionTalentVisible() {

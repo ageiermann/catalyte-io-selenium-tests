@@ -36,7 +36,7 @@
       <version>2.29.0</version>
       <scope>test</scope>
     </dependency>
-  <!-- WebDriverManager for auto driver binaries -->
+    <!-- WebDriverManager for auto driver binaries -->
     <dependency>
       <groupId>io.github.bonigarcia</groupId>
       <artifactId>webdrivermanager</artifactId>

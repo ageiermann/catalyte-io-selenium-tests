@@ -1,3 +1,5 @@
+org\catalyte\io\tests\scenarios\ApprenticeshipsPageTests.class
+org\catalyte\io\tests\unit\BaseUiTest.class
 org\catalyte\io\utils\ScreenshotUtil.class
 org\catalyte\io\tests\scenarios\HireApprenticeSectionTests.class
 org\catalyte\io\utils\TestListener.class

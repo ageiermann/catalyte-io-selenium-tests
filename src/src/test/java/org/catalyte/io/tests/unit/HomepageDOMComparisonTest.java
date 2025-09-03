@@ -1,29 +1,35 @@
 package org.catalyte.io.tests.unit;
 
+import io.qameta.allure.testng.AllureTestNg;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Set;
+import org.catalyte.io.pages.HomePage;
 import org.catalyte.io.utils.LoggerUtil;
+import org.catalyte.io.utils.TestListener;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-public class HomepageDOMComparisonTest {
+@Listeners({AllureTestNg.class, TestListener.class})
+public class HomepageDOMComparisonTest extends BaseUiTest {
 
   private static final java.util.logging.Logger logger = LoggerUtil.getLogger(
       HomepageDOMComparisonTest.class);
-  private WebDriver driver;
 
-  @BeforeClass
-  public void setUp() {
-    driver = new ChromeDriver();
+  private HomePage home;
+
+  @BeforeClass(alwaysRun = true)
+  public void setUp() throws Exception {
+    super.setUpBase();
+    open("https://www.catalyte.io/hire-talent/hire-apprentices/");
+    home = new HomePage(driver);
     driver.manage().window().maximize();
   }
 

@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * "Get Hired" / Apprenticeships Page object.
@@ -33,13 +32,8 @@ public class ApprenticeshipsPage extends Page {
   private static final By H1 = By.tagName("h1");
   private static final By H2 = By.tagName("h2");
 
-  protected WebDriver driver;
-  protected WebDriverWait wait;
-
   public ApprenticeshipsPage(WebDriver driver) {
     super(driver);
-    this.driver = driver;
-    this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
   }
 
   public List<WebElement> getIconBoxTitles() { return driver.findElements(iconBoxTitles); }
