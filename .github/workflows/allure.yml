@@ -36,6 +36,16 @@ jobs:
         run: mvn -q -DskipTests=false clean test
         working-directory: ./src
 
+      - name: Check for broken setUpBase in this run
+        if: always()
+        run: |
+          echo "Any 'broken' setUpBase in allure-results?"
+          grep -R "\"name\":\"setUpBase\"" -n ./src/target/allure-results || true
+          # list statuses for every setUpBase across all containers
+          for f in ./src/target/allure-results/*-container.json; do
+          jq -r --arg name "setUpBase" 'select(.befores) | .befores[]? | select(.name==$name) | "\(.name) -> \(.status) in " + input_filename' "$f" 2>/dev/null || true
+          done
+          
       # 5) Debug: verify Allure results exist
       - name: Debug Allure results
         if: always()
