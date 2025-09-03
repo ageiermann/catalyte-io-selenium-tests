@@ -63,11 +63,13 @@ public class HireApprenticeSectionTests extends BaseUiTest {
   @Test
   public void testWorkWithUsButtonDisplayedAndFunctionsLenient() {
     checkElement(() -> hire.getWorkWithUsButton().isDisplayed(), "Main workflow button missing");
-    hire.getWorkWithUsButton().click();
-    getWait().until(ExpectedConditions.urlContains("https://www.catalyte.io/about/"));
-    String currentUrl = driver.getCurrentUrl();
-    Assert.assertTrue(currentUrl.contains("https://www.catalyte.io/about/contact-sales/"),
-        "Button did not navigate to the expected page! Current URL: " + currentUrl);
+    hire.clickWorkWithUsButton();
+    getWait().until(ExpectedConditions.urlContains("/about/"));
+    String currentUrl = driver.getCurrentUrl().toLowerCase();
+    org.testng.Assert.assertTrue(
+        currentUrl.contains("/about/contact-sales"),
+        "Button did not navigate to expected page. Current URL: " + currentUrl
+    );
   }
 
   @Test

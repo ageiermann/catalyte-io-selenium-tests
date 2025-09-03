@@ -82,4 +82,9 @@ public class HirePage extends Page {
   public WebElement getTestimonialsVideo() {
     return find(testimonialsVideo);
   }
+  //fixing flaky clicks
+  public void clickWorkWithUsButton() {
+    dismissCookieIfPresent();
+    safeClick(workWithUsButton);
+  }
 }
