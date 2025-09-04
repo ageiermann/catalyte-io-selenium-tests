@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 
 public class HomePage extends Page {
 
+  //TODO: add accordion checks/tests
+
   private final By accordionTalent = By.id("what-if-i-need-more-than-apprentice-talent");
   private final By industriesAccordion = By.id("what-industries-do-you-provide-talent-for");
   private final By hireAccordion = By.id("how-can-i-hire-catalyte-talent");

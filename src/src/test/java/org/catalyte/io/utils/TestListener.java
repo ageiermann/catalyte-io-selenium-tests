@@ -1,8 +1,8 @@
 package org.catalyte.io.utils;
 
+import org.openqa.selenium.WebDriver;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-import org.openqa.selenium.WebDriver;
 
 public class TestListener implements ITestListener {
 

@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 
 public class HirePage extends Page {
 
+  //TODO: add accordion checks/tests
+
   // Locators
   private final By textEditors = By.cssSelector(".elementor-widget-text-editor p");
   private final By accordionTalent = By.cssSelector(
@@ -82,6 +84,7 @@ public class HirePage extends Page {
   public WebElement getTestimonialsVideo() {
     return find(testimonialsVideo);
   }
+
   //fixing flaky clicks
   public void clickWorkWithUsButton() {
     dismissCookieIfPresent();

@@ -5,6 +5,8 @@ import io.qameta.allure.testng.AllureTestNg;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.List;
+import org.catalyte.io.utils.LoggerUtil;
 import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
@@ -22,19 +24,30 @@ import org.testng.annotations.Listeners;
 @Listeners({AllureTestNg.class, TestListener.class})
 public abstract class BaseUiTest {
 
+  protected final java.util.logging.Logger logger = LoggerUtil.getLogger(getClass());
   protected WebDriver driver;
   protected WebDriverWait wait;
-
+  protected List<String> warnings;
   // Keep a handle to delete the temp profile afterward
   private Path userDataDir;
 
-  /** Override to change default timeout (seconds). */
-  protected int defaultTimeoutSeconds() { return 20; }
+  /**
+   * Override to change default timeout (seconds).
+   */
+  protected int defaultTimeoutSeconds() {
+    return 20;
+  }
 
-  /** Override to change default window size. */
-  protected Dimension defaultWindowSize() { return new Dimension(1920, 1080); }
+  /**
+   * Override to change default window size.
+   */
+  protected Dimension defaultWindowSize() {
+    return new Dimension(1920, 1080);
+  }
 
-  /** One-time driver init per class. */
+  /**
+   * One-time driver init per class.
+   */
   @BeforeClass(alwaysRun = true)
   public final void setUpBase() throws Exception {
     ChromeOptions options = new ChromeOptions();
@@ -50,12 +63,14 @@ public abstract class BaseUiTest {
 
     // Make the profile path unique for each test class + CI run
     String runId = System.getenv().getOrDefault("GITHUB_RUN_ID", String.valueOf(System.nanoTime()));
-    userDataDir = Files.createTempDirectory("chrome-prof-" + getClass().getSimpleName() + "-" + runId + "-");
+    userDataDir = Files.createTempDirectory(
+        "chrome-prof-" + getClass().getSimpleName() + "-" + runId + "-");
     options.addArguments("--user-data-dir=" + userDataDir.toAbsolutePath());
 
     driver = new ChromeDriver(options);
-    wait   = new WebDriverWait(driver, Duration.ofSeconds(defaultTimeoutSeconds()));
+    wait = new WebDriverWait(driver, Duration.ofSeconds(defaultTimeoutSeconds()));
   }
+
   //lazy getter to protect run order
   protected WebDriverWait getWait() {
     if (wait == null) {
@@ -67,12 +82,16 @@ public abstract class BaseUiTest {
     return wait;
   }
 
-  /** Optional helper to open a URL (keeps tests tidy). */
+  /**
+   * Optional helper to open a URL (keeps tests tidy).
+   */
   protected void open(String url) {
     driver.get(url);
   }
 
-  /** On failure, attach a screenshot to Allure. */
+  /**
+   * On failure, attach a screenshot to Allure.
+   */
   @AfterMethod(alwaysRun = true)
   protected void afterEach(ITestResult result) {
     if (!result.isSuccess() && driver instanceof TakesScreenshot ts) {
@@ -81,19 +100,52 @@ public abstract class BaseUiTest {
   }
 
   @Attachment(value = "Failure Screenshot", type = "image/png")
-  private byte[] attachScreenshot(byte[] bytes) { return bytes; }
+  private byte[] attachScreenshot(byte[] bytes) {
+    return bytes;
+  }
 
-  /** Quit and cleanup the temp Chrome profile. */
+  /**
+   * Quit and cleanup the temp Chrome profile.
+   */
   @AfterClass(alwaysRun = true)
   public void tearDownBase() throws Exception {
     if (driver != null) {
-      try { driver.quit(); } catch (Exception ignored) {}
+      try {
+        driver.quit();
+      } catch (Exception ignored) {
+      }
     }
     if (userDataDir != null) {
-      try { Files.walk(userDataDir)
-          .sorted((a,b) -> b.getNameCount() - a.getNameCount()) // delete children first
-          .forEach(p -> { try { Files.deleteIfExists(p); } catch (Exception ignored) {} });
-      } catch (Exception ignored) {}
+      try {
+        Files.walk(userDataDir)
+            .sorted((a, b) -> b.getNameCount() - a.getNameCount()) // delete children first
+            .forEach(p -> {
+              try {
+                Files.deleteIfExists(p);
+              } catch (Exception ignored) {
+              }
+            });
+      } catch (Exception ignored) {
+      }
     }
+  }
+
+  // ===== Utility methods =====
+  protected void checkElement(Checkable condition, String warningMessage) {
+    try {
+      if (!condition.check()) {
+        warnings.add(warningMessage);
+        logger.warning(warningMessage);
+      }
+    } catch (Exception e) {
+      warnings.add(warningMessage + " (exception: " + e.getMessage() + ")");
+      logger.warning(warningMessage);
+    }
+  }
+
+  @FunctionalInterface
+  public interface Checkable {
+
+    boolean check();
   }
 }

@@ -5,21 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import org.catalyte.io.pages.HirePage;
 import org.catalyte.io.tests.unit.BaseUiTest;
-import org.catalyte.io.utils.LoggerUtil;
 import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
 
 @Listeners({AllureTestNg.class, TestListener.class})
 public class HireApprenticeSectionTests extends BaseUiTest {
 
-  private static final java.util.logging.Logger logger = LoggerUtil.getLogger(
-      HireApprenticeSectionTests.class);
   private HirePage hire;
   private List<String> warnings;
   private int totalChecks;
@@ -57,7 +52,8 @@ public class HireApprenticeSectionTests extends BaseUiTest {
   @Test
   public void testVideosExistLenient() throws InterruptedException {
     checkElement(() -> hire.getPRVideo().isDisplayed(), "Apprenticeships PR video iframe missing");
-    checkElement(() -> hire.getTestimonialsVideo().isDisplayed(), "Apprenticeships testimonials video iframe missing");
+    checkElement(() -> hire.getTestimonialsVideo().isDisplayed(),
+        "Apprenticeships testimonials video iframe missing");
   }
 
   @Test
@@ -80,21 +76,4 @@ public class HireApprenticeSectionTests extends BaseUiTest {
       logger.warning("Menu text items missing");
     }
   }
-
-  // ===== Utility methods =====
-  private void checkElement(Checkable condition, String warningMessage) {
-    totalChecks++;
-    try {
-      if (!condition.check()) {
-        warnings.add(warningMessage);
-        logger.warning(warningMessage);
-      }
-    } catch (Exception e) {
-      warnings.add(warningMessage + " (exception: " + e.getMessage() + ")");
-      logger.warning(warningMessage);
-    }
-  }
-
-  @FunctionalInterface
-  public interface Checkable { boolean check(); }
 }
