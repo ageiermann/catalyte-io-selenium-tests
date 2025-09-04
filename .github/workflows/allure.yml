@@ -47,7 +47,7 @@ jobs:
           find ./src/target/allure-results -type f -size 0 -print -delete || true
 
       - name: Generate Allure report
-        run: mvn -q allure:report
+        run: mvn -q -Dallure.results.directory=./target/allure-results allure:report
         working-directory: ./src
 
       - name: Show generated Allure site
