@@ -26,9 +26,25 @@ jobs:
       - name: Set up ChromeDriver
         uses: nanasess/setup-chromedriver@v2
 
+      # BEFORE tests — remove any stale results dirs from older configs
+      - name: Clean old Allure folders
+        run: |
+          rm -rf ./src/allure-results ./allure-results
+          mkdir -p ./src/target/allure-results
+
+      # Run tests
       - name: Run Selenium tests
         run: mvn -q -DskipTests=false clean test
         working-directory: ./src
+
+      # AFTER tests — list, and delete any zero-byte files
+      - name: Sanity check Allure results
+        if: always()
+        run: |
+          echo "Results path should be: ./src/target/allure-results"
+          ls -la ./src/target/allure-results || true
+          echo "Zero-byte files (if any):"
+          find ./src/target/allure-results -type f -size 0 -print -delete || true
 
       - name: Generate Allure report
         run: mvn -q allure:report
