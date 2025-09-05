@@ -19,6 +19,7 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 
 @Listeners({AllureTestNg.class, TestListener.class})
@@ -71,6 +72,15 @@ public abstract class BaseUiTest {
     wait = new WebDriverWait(driver, Duration.ofSeconds(defaultTimeoutSeconds()));
   }
 
+  //Resetting driver state per method to stop flakiness
+  protected String startUrlForThisClass() { return "https://google.com"; }
+
+  @BeforeMethod(alwaysRun = true)
+  public void resetState() {
+    driver.manage().deleteAllCookies();
+    driver.navigate().to("about:blank");
+    driver.get(startUrlForThisClass());
+  }
   //lazy getter to protect run order
   protected WebDriverWait getWait() {
     if (wait == null) {

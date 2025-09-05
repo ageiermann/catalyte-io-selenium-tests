@@ -15,13 +15,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  * "Get Hired" / Apprenticeships Page object.
  **/
 public class ApprenticeshipsPage extends Page {
-
-  private static final By CARD_TITLE_LINKS = By.cssSelector(
-      "[data-elementor-type='loop-item'].type-apprenticeships h4.elementor-heading-title a"
-  );
-  private static final By FAQ_SECTION = By.cssSelector("#faqs");
-  private static final By ACCORDION_HEADERS = By.cssSelector(
-      "#eael-adv-accordion-32775cf4 .eael-accordion-header");
   /* ===== Destination page headings ===== */
   private static final By H1 = By.tagName("h1");
   private static final By H2 = By.tagName("h2");
@@ -35,19 +28,17 @@ public class ApprenticeshipsPage extends Page {
   private final By element3d21807cImageBoxWrapper =
       By.cssSelector(".elementor-element-3d21807c .elementor-image-box-wrapper");
   private final By imageBoxTitles = By.cssSelector(".elementor-image-box-title");
+  private final By allFaqsButtonDiv = By.cssSelector(".elementor-element-c47f786");
+  //Apprenticeships cards/links
+  private static final By CARD_TITLE_LINKS = By.cssSelector(
+      "[data-elementor-type='loop-item'].type-apprenticeships h4.elementor-heading-title a"
+  );
   /**
    * FAQ accordions
    **/
-  private final By accordionHowItWorks = By.cssSelector(
-      "#how-does-a-catalyte-apprenticeship-work .eael-accordion-tab-title");
-  private final By accordionCost = By.cssSelector(
-      "#how-much-does-an-apprenticeship-cost .eael-accordion-tab-title");
-  private final By accordionCommitment = By.cssSelector(
-      "#are-apprenticeships-a-full-time-or-part-time-commitment .eael-accordion-tab-title");
-  private final By accordionNeedDegree = By.cssSelector(
-      "#do-i-need-a-college-degree-to-apply .eael-accordion-tab-title");
-  private final By accordionApplyRequirements = By.cssSelector(
-      "#what-are-the-requirements-to-apply .eael-accordion-tab-title");
+  private static final By FAQ_SECTION = By.cssSelector("#faqs");
+  private static final By ACCORDION_HEADERS = By.cssSelector(
+      "#eael-adv-accordion-32775cf4 .eael-accordion-header");
 
   public ApprenticeshipsPage(WebDriver driver) {
     super(driver);
@@ -62,12 +53,12 @@ public class ApprenticeshipsPage extends Page {
     return s;
   }
 
-  public List<WebElement> getIconBoxTitles() {
-    return driver.findElements(iconBoxTitles);
-  }
-
   public WebElement getWpImage2230() {
     return driver.findElement(wpImage2230);
+  }
+
+  public List<WebElement> getIconBoxTitles() {
+    return driver.findElements(iconBoxTitles);
   }
 
   public List<WebElement> getElement4b74d2c3SizeDefault() {
@@ -85,13 +76,14 @@ public class ApprenticeshipsPage extends Page {
   public List<WebElement> getImageBoxTitles() {
     return driver.findElements(imageBoxTitles);
   }
-  /* === FAQ Accordion Helpers === */
 
   public List<WebElement> getOpportunityMetrics() {
     WebElement opportunityMetricsSection = driver.findElement(
         By.cssSelector(".elementor-element-269de2dc"));
     return opportunityMetricsSection.findElements(By.cssSelector(".elementor-widget-heading"));
   }
+
+  /* === FAQ Accordion Helpers === */
 
   /**
    * Find the FAQ header by its visible text (case-insensitive).
@@ -110,7 +102,7 @@ public class ApprenticeshipsPage extends Page {
   }
   //Non-flaky replacement for faqContentContains()
   public boolean faqContentContainsAfterAllottedTime(String question, String expected, java.time.Duration timeout) {
-    org.openqa.selenium.WebElement header = findFaqHeaderByText(question);
+    WebElement header = findFaqHeaderByText(question);
     return accordionTextEventuallyContains(header, expected, timeout);
   }
 
@@ -120,6 +112,16 @@ public class ApprenticeshipsPage extends Page {
   public WebElement expandFaq(String question) {
     WebElement header = findFaqHeaderByText(question);
     return expandAccordionByAriaControls(header); // uses base Page helper
+  }
+
+  /* Locators for FAQs Button */
+  public WebElement getAllFaqsButton(){
+    return driver.findElement(allFaqsButtonDiv).findElement(By.cssSelector(".elementor-size-xs"));
+  }
+
+  public void clickAllFaqsButton(){
+    safeClick(getAllFaqsButton());
+    dismissCookieIfPresent();
   }
 
   /* ===== Card list helpers ===== */

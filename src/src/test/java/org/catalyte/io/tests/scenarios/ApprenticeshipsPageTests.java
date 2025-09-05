@@ -7,8 +7,10 @@ import org.catalyte.io.pages.ApprenticeshipsPage;
 import org.catalyte.io.tests.unit.BaseUiTest;
 import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -18,17 +20,21 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
 
   private ApprenticeshipsPage page;
   private List<String> warnings;
-  private int totalChecks;
+  private String apprenticeshipsPageUrl = "https://www.catalyte.io/apprenticeships/";
 
   @BeforeClass(alwaysRun = true)
   public void setUpPages() {
     if (driver == null) {
       throw new IllegalStateException("Driver is null in setUpPages()");
     }
-    open("https://www.catalyte.io/apprenticeships/");
+    open(apprenticeshipsPageUrl);
     page = new ApprenticeshipsPage(driver);
     page.waitForCards(2);
   }
+
+  @BeforeMethod(alwaysRun = true)
+  @Override
+  protected String startUrlForThisClass() { return apprenticeshipsPageUrl; }
 
   @Test
   public void verifyAllKeyElementsOfHowItWorksSectionPresent() {
@@ -68,7 +74,6 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
     for (String name : apprenticeships) {
       SoftAssert sa = new SoftAssert();
       testedPages++;
-      totalChecks++;
       logger.info("Testing apprenticeship: " + name);
       try {
         page.clickApprenticeshipType(name);
@@ -77,7 +82,6 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
       } catch (Exception e) {
         sa.fail("Exception while testing '" + name + "': " + e.getMessage());
         testedPages--;
-        totalChecks++;
       } finally {
         driver.navigate().back();
         page.waitUntilBackOnCards();
@@ -90,7 +94,6 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
   @Test
   public void verifyAllOpportunityMetricsElementsPresent() {
     for (WebElement e : page.getOpportunityMetrics()) {
-      totalChecks++;
       checkElement(e::isDisplayed, "Element " + e.getAttribute("data-id") + " missing.");
     }
   }
@@ -125,6 +128,17 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
     Assert.assertTrue(
         page.faqContentContainsAfterAllottedTime(needDegree, "do not take degrees", Duration.ofSeconds(5)),
         "FAQ content did not contain expected phrase for: " + needDegree
+    );
+  }
+  @Test
+  public void testAllFaqsButtonDisplayedAndFunctionsLenient() {
+    checkElement(() -> page.getAllFaqsButton().isDisplayed(), "'All FAQS' button missing");
+    page.clickAllFaqsButton();
+    getWait().until(ExpectedConditions.urlContains("/about/"));
+    String currentUrl = driver.getCurrentUrl().toLowerCase();
+    org.testng.Assert.assertTrue(
+        currentUrl.contains("/about/faqs"),
+        "Button did not navigate to expected page. Current URL: " + currentUrl
     );
   }
 }
