@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="TestSuite" time="46.98" tests="8" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="TestSuite" time="71.212" tests="12" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="24"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,9 +15,10 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="C:\Users\ageiermann\.jdks\openjdk-24.0.1\bin"/>
-    <property name="sun.java.command" value="C:\Users\ageiermann\AppData\Local\Temp\surefire3105795866370359392\surefirebooter-20250903145253263_3.jar C:\Users\ageiermann\AppData\Local\Temp\surefire3105795866370359392 2025-09-03T14-52-53_160-jvmRun1 surefire-20250903145253263_1tmp surefire_0-20250903145253263_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\ageiermann\AppData\Local\Temp\surefire13541026543780195671\surefirebooter-20250905150253670_3.jar C:\Users\ageiermann\AppData\Local\Temp\surefire13541026543780195671 2025-09-05T15-02-53_535-jvmRun1 surefire-20250905150253670_1tmp surefire_0-20250905150253670_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\ageiermann\repositories\CatalyteTests\src\target\test-classes;C:\Users\ageiermann\repositories\CatalyteTests\src\target\classes;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-java\4.23.0\selenium-java-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-api\4.23.0\selenium-api-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-chrome-driver\4.23.0\selenium-chrome-driver-4.23.0.jar;C:\Users\ageiermann\.m2\repository\com\google\auto\service\auto-service-annotations\1.1.1\auto-service-annotations-1.1.1.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-chromium-driver\4.23.0\selenium-chromium-driver-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-json\4.23.0\selenium-json-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-manager\4.23.0\selenium-manager-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-devtools-v125\4.23.0\selenium-devtools-v125-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-devtools-v126\4.23.0\selenium-devtools-v126-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-devtools-v127\4.23.0\selenium-devtools-v127-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-devtools-v85\4.23.0\selenium-devtools-v85-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-edge-driver\4.23.0\selenium-edge-driver-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-firefox-driver\4.23.0\selenium-firefox-driver-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-http\4.23.0\selenium-http-4.23.0.jar;C:\Users\ageiermann\.m2\repository\dev\failsafe\failsafe\3.3.2\failsafe-3.3.2.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-ie-driver\4.23.0\selenium-ie-driver-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-remote-driver\4.23.0\selenium-remote-driver-4.23.0.jar;C:\Users\ageiermann\.m2\repository\com\google\guava\guava\33.2.1-jre\guava-33.2.1-jre.jar;C:\Users\ageiermann\.m2\repository\com\google\guava\failureaccess\1.0.2\failureaccess-1.0.2.jar;C:\Users\ageiermann\.m2\repository\com\google\guava\listenablefuture\9999.0-empty-to-avoid-conflict-with-guava\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;C:\Users\ageiermann\.m2\repository\com\google\code\findbugs\jsr305\3.0.2\jsr305-3.0.2.jar;C:\Users\ageiermann\.m2\repository\org\checkerframework\checker-qual\3.42.0\checker-qual-3.42.0.jar;C:\Users\ageiermann\.m2\repository\com\google\j2objc\j2objc-annotations\3.0.0\j2objc-annotations-3.0.0.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\semconv\opentelemetry-semconv\1.25.0-alpha\opentelemetry-semconv-1.25.0-alpha.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\opentelemetry-api\1.40.0\opentelemetry-api-1.40.0.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\opentelemetry-context\1.40.0\opentelemetry-context-1.40.0.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\opentelemetry-exporter-logging\1.40.0\opentelemetry-exporter-logging-1.40.0.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\opentelemetry-sdk-common\1.40.0\opentelemetry-sdk-common-1.40.0.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\opentelemetry-sdk-extension-autoconfigure-spi\1.40.0\opentelemetry-sdk-extension-autoconfigure-spi-1.40.0.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\opentelemetry-sdk-extension-autoconfigure\1.40.0\opentelemetry-sdk-extension-autoconfigure-1.40.0.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\opentelemetry-api-incubator\1.40.0-alpha\opentelemetry-api-incubator-1.40.0-alpha.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\opentelemetry-sdk-trace\1.40.0\opentelemetry-sdk-trace-1.40.0.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\opentelemetry-sdk\1.40.0\opentelemetry-sdk-1.40.0.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\opentelemetry-sdk-metrics\1.40.0\opentelemetry-sdk-metrics-1.40.0.jar;C:\Users\ageiermann\.m2\repository\io\opentelemetry\opentelemetry-sdk-logs\1.40.0\opentelemetry-sdk-logs-1.40.0.jar;C:\Users\ageiermann\.m2\repository\net\bytebuddy\byte-buddy\1.14.18\byte-buddy-1.14.18.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-os\4.23.0\selenium-os-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\apache\commons\commons-exec\1.4.0\commons-exec-1.4.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-safari-driver\4.23.0\selenium-safari-driver-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\seleniumhq\selenium\selenium-support\4.23.0\selenium-support-4.23.0.jar;C:\Users\ageiermann\.m2\repository\org\testng\testng\7.9.0\testng-7.9.0.jar;C:\Users\ageiermann\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\ageiermann\.m2\repository\com\beust\jcommander\1.82\jcommander-1.82.jar;C:\Users\ageiermann\.m2\repository\org\webjars\jquery\3.7.1\jquery-3.7.1.jar;C:\Users\ageiermann\.m2\repository\io\qameta\allure\allure-testng\2.29.0\allure-testng-2.29.0.jar;C:\Users\ageiermann\.m2\repository\io\qameta\allure\allure-java-commons\2.29.0\allure-java-commons-2.29.0.jar;C:\Users\ageiermann\.m2\repository\io\qameta\allure\allure-model\2.29.0\allure-model-2.29.0.jar;C:\Users\ageiermann\.m2\repository\io\qameta\allure\allure-test-filter\2.29.0\allure-test-filter-2.29.0.jar;C:\Users\ageiermann\.m2\repository\io\github\bonigarcia\webdrivermanager\5.9.2\webdrivermanager-5.9.2.jar;C:\Users\ageiermann\.m2\repository\com\google\code\gson\gson\2.11.0\gson-2.11.0.jar;C:\Users\ageiermann\.m2\repository\com\google\errorprone\error_prone_annotations\2.27.0\error_prone_annotations-2.27.0.jar;C:\Users\ageiermann\.m2\repository\com\github\docker-java\docker-java\3.4.0\docker-java-3.4.0.jar;C:\Users\ageiermann\.m2\repository\com\github\docker-java\docker-java-core\3.4.0\docker-java-core-3.4.0.jar;C:\Users\ageiermann\.m2\repository\com\github\docker-java\docker-java-api\3.4.0\docker-java-api-3.4.0.jar;C:\Users\ageiermann\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.10.3\jackson-annotations-2.10.3.jar;C:\Users\ageiermann\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.10.3\jackson-databind-2.10.3.jar;C:\Users\ageiermann\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.10.3\jackson-core-2.10.3.jar;C:\Users\ageiermann\.m2\repository\org\slf4j\jcl-over-slf4j\1.7.30\jcl-over-slf4j-1.7.30.jar;C:\Users\ageiermann\.m2\repository\com\github\docker-java\docker-java-transport-httpclient5\3.4.0\docker-java-transport-httpclient5-3.4.0.jar;C:\Users\ageiermann\.m2\repository\com\github\docker-java\docker-java-transport\3.4.0\docker-java-transport-3.4.0.jar;C:\Users\ageiermann\.m2\repository\net\java\dev\jna\jna\5.13.0\jna-5.13.0.jar;C:\Users\ageiermann\.m2\repository\org\brotli\dec\0.1.2\dec-0.1.2.jar;C:\Users\ageiermann\.m2\repository\org\apache\commons\commons-lang3\3.15.0\commons-lang3-3.15.0.jar;C:\Users\ageiermann\.m2\repository\org\apache\commons\commons-compress\1.26.2\commons-compress-1.26.2.jar;C:\Users\ageiermann\.m2\repository\commons-codec\commons-codec\1.17.0\commons-codec-1.17.0.jar;C:\Users\ageiermann\.m2\repository\commons-io\commons-io\2.16.1\commons-io-2.16.1.jar;C:\Users\ageiermann\.m2\repository\org\apache\httpcomponents\client5\httpclient5\5.2.1\httpclient5-5.2.1.jar;C:\Users\ageiermann\.m2\repository\org\apache\httpcomponents\core5\httpcore5\5.2\httpcore5-5.2.jar;C:\Users\ageiermann\.m2\repository\org\apache\httpcomponents\core5\httpcore5-h2\5.2\httpcore5-h2-5.2.jar;C:\Users\ageiermann\.m2\repository\org\jsoup\jsoup\1.17.2\jsoup-1.17.2.jar;"/>
+    <property name="allure.results.directory" value="C:\Users\ageiermann\repositories\CatalyteTests\src\target/allure-results"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\ageiermann"/>
     <property name="user.language" value="en"/>
@@ -30,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\ageiermann\AppData\Local\Temp\surefire3105795866370359392\surefirebooter-20250903145253263_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\ageiermann\AppData\Local\Temp\surefire13541026543780195671\surefirebooter-20250905150253670_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="24.0.1+9-30"/>
@@ -59,74 +60,80 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="68.0"/>
   </properties>
-  <testcase name="regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality" classname="org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests" time="25.819">
+  <testcase name="faqAccordion_DisplaysExpectedText" classname="org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests" time="1.629">
     <system-err><![CDATA[SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
 SLF4J: Defaulting to no-operation (NOP) logger implementation
 SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
-Sep 03, 2025 2:52:56 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+Sep 05, 2025 3:02:56 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
 WARNING: Unable to find CDP implementation matching 139
-Sep 03, 2025 2:52:56 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$5
+Sep 05, 2025 3:02:56 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$5
 WARNING: Unable to find version of CDP to use for 139.0.7258.139. You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.23.0` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
-Sep 03, 2025 2:53:00 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+]]></system-err>
+  </testcase>
+  <testcase name="regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality" classname="org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests" time="16.183">
+    <system-err><![CDATA[Sep 05, 2025 3:03:06 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Found apprenticeships: 6[Software development, Digital media, IT services, Project management, Cybersecurity, Sales]
-Sep 03, 2025 2:53:00 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:06 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Testing apprenticeship: Software development
-Sep 03, 2025 2:53:04 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:08 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Pages tested successfully: 1 of 6
-Sep 03, 2025 2:53:04 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:08 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Testing apprenticeship: Digital media
-Sep 03, 2025 2:53:07 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:12 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Pages tested successfully: 2 of 6
-Sep 03, 2025 2:53:07 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:12 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Testing apprenticeship: IT services
-Sep 03, 2025 2:53:10 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:14 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Pages tested successfully: 3 of 6
-Sep 03, 2025 2:53:10 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:14 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Testing apprenticeship: Project management
-Sep 03, 2025 2:53:12 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:16 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Pages tested successfully: 4 of 6
-Sep 03, 2025 2:53:12 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:16 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Testing apprenticeship: Cybersecurity
-Sep 03, 2025 2:53:16 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:17 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Pages tested successfully: 5 of 6
-Sep 03, 2025 2:53:16 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:17 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Testing apprenticeship: Sales
-Sep 03, 2025 2:53:26 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
+Sep 05, 2025 3:03:22 PM org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality
 INFO: Pages tested successfully: 6 of 6
 ]]></system-err>
   </testcase>
-  <testcase name="verifyAllKeyElementsOfHowItWorksSectionPresent" classname="org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests" time="0.07"/>
-  <testcase name="testAccordionsExistLenient" classname="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests" time="0.084">
-    <system-err><![CDATA[Sep 03, 2025 2:53:27 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+  <testcase name="testAllFaqsButtonDisplayedAndFunctionsLenient" classname="org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests" time="1.573"/>
+  <testcase name="verifyAllKeyElementsOfHowItWorksSectionPresent" classname="org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests" time="0.101"/>
+  <testcase name="verifyAllOpportunityMetricsElementsPresent" classname="org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests" time="0.174"/>
+  <testcase name="faqAccordion_ExistsAndDisplaysExpectedText" classname="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests" time="1.745">
+    <system-err><![CDATA[Sep 05, 2025 3:03:27 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
 WARNING: Unable to find CDP implementation matching 139
-Sep 03, 2025 2:53:27 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$5
+Sep 05, 2025 3:03:27 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$5
 WARNING: Unable to find version of CDP to use for 139.0.7258.139. You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.23.0` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
 ]]></system-err>
   </testcase>
-  <testcase name="testImagesExistLenient" classname="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests" time="0.086"/>
-  <testcase name="testMenuTextItemsLenient" classname="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests" time="0.028"/>
-  <testcase name="testVideosExistLenient" classname="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests" time="0.067"/>
-  <testcase name="testWorkWithUsButtonDisplayedAndFunctionsLenient" classname="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests" time="1.353"/>
-  <testcase name="compareBaselineWithLivePageLenientThreshold" classname="org.catalyte.io.tests.unit.HomepageDOMComparisonTest" time="3.022">
-    <system-err><![CDATA[Sep 03, 2025 2:53:33 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+  <testcase name="testAllFaqsButtonDisplayedAndFunctionsLenient" classname="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests" time="0.899"/>
+  <testcase name="testImagesExistLenient" classname="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests" time="0.139"/>
+  <testcase name="testMenuTextItemsLenient" classname="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests" time="0.059"/>
+  <testcase name="testVideosExistLenient" classname="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests" time="0.07"/>
+  <testcase name="testWorkWithUsButtonDisplayedAndFunctionsLenient" classname="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests" time="0.884"/>
+  <testcase name="compareBaselineWithLivePageLenientThreshold" classname="org.catalyte.io.tests.unit.HomepageDOMComparisonTest" time="2.59">
+    <system-err><![CDATA[Sep 05, 2025 3:03:40 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
 WARNING: Unable to find CDP implementation matching 139
-Sep 03, 2025 2:53:33 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$5
+Sep 05, 2025 3:03:40 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$5
 WARNING: Unable to find version of CDP to use for 139.0.7258.139. You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.23.0` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
-Sep 03, 2025 2:53:34 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+Sep 05, 2025 3:03:42 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
 WARNING: Unable to find CDP implementation matching 139
-Sep 03, 2025 2:53:34 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$5
+Sep 05, 2025 3:03:42 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$5
 WARNING: Unable to find version of CDP to use for 139.0.7258.139. You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.23.0` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
-Sep 03, 2025 2:53:39 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
+Sep 05, 2025 3:04:04 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
 INFO: Starting DOM comparison test...
-Sep 03, 2025 2:53:39 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
+Sep 05, 2025 3:04:04 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
 WARNING: Warning: Text might have changed or missing: "Get hiredLearn about our apprenticeships"
-Sep 03, 2025 2:53:39 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
+Sep 05, 2025 3:04:04 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
 WARNING: Warning: Text might have changed or missing: "Consumer Nike"
-Sep 03, 2025 2:53:39 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
+Sep 05, 2025 3:04:04 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
 WARNING: Warning: Text might have changed or missing: "FAQsWe have answers"
-Sep 03, 2025 2:53:39 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
+Sep 05, 2025 3:04:04 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
 WARNING: Warning: Text might have changed or missing: "PartnersAllies for change"
-Sep 03, 2025 2:53:40 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
+Sep 05, 2025 3:04:04 PM org.catalyte.io.tests.unit.HomepageDOMComparisonTest compareBaselineWithLivePageLenientThreshold
 WARNING: Warning: Number of major sections changed: baseline=15, live=16
 ]]></system-err>
   </testcase>

@@ -1,193 +1,349 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="8" passed="8" failed="0" skipped="0">
+<testng-results ignored="0" total="12" passed="12" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-09-03T14:52:53 EDT" name="Surefire suite" finished-at="2025-09-03T14:53:40 EDT" duration-ms="46430">
+  <suite started-at="2025-09-05T15:02:54 EDT" name="Surefire suite" finished-at="2025-09-05T15:04:05 EDT" duration-ms="70677">
     <groups>
     </groups>
-    <test started-at="2025-09-03T14:52:53 EDT" name="Surefire test" finished-at="2025-09-03T14:53:40 EDT" duration-ms="46430">
+    <test started-at="2025-09-05T15:02:54 EDT" name="Surefire test" finished-at="2025-09-05T15:04:05 EDT" duration-ms="70677">
       <class name="org.catalyte.io.tests.unit.HomepageDOMComparisonTest">
-        <test-method is-config="true" signature="setUpBase()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@483f6d77]" started-at="2025-09-03T14:53:32 EDT" name="setUpBase" finished-at="2025-09-03T14:53:33 EDT" duration-ms="1013" status="PASS">
+        <test-method is-config="true" signature="setUpBase()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@581ac8a8]" started-at="2025-09-05T15:03:39 EDT" name="setUpBase" finished-at="2025-09-05T15:03:40 EDT" duration-ms="1190" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpBase -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@483f6d77]" started-at="2025-09-03T14:53:33 EDT" name="setUp" finished-at="2025-09-03T14:53:37 EDT" duration-ms="3569" status="PASS">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@581ac8a8]" started-at="2025-09-05T15:03:40 EDT" name="setUp" finished-at="2025-09-05T15:04:01 EDT" duration-ms="20601" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="compareBaselineWithLivePageLenientThreshold()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@483f6d77]" started-at="2025-09-03T14:53:37 EDT" name="compareBaselineWithLivePageLenientThreshold" finished-at="2025-09-03T14:53:40 EDT" duration-ms="3024" status="PASS">
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@581ac8a8]" started-at="2025-09-05T15:04:01 EDT" name="resetState" finished-at="2025-09-05T15:04:02 EDT" duration-ms="775" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method signature="compareBaselineWithLivePageLenientThreshold()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@581ac8a8]" started-at="2025-09-05T15:04:02 EDT" name="compareBaselineWithLivePageLenientThreshold" finished-at="2025-09-05T15:04:04 EDT" duration-ms="2593" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- compareBaselineWithLivePageLenientThreshold -->
-        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@483f6d77]" started-at="2025-09-03T14:53:40 EDT" name="afterEach" finished-at="2025-09-03T14:53:40 EDT" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@581ac8a8]" started-at="2025-09-05T15:04:04 EDT" name="afterEach" finished-at="2025-09-05T15:04:04 EDT" duration-ms="1" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=compareBaselineWithLivePageLenientThreshold status=SUCCESS method=HomepageDOMComparisonTest.compareBaselineWithLivePageLenientThreshold()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@483f6d77] output={null}]]]>
+                <![CDATA[[TestResult name=compareBaselineWithLivePageLenientThreshold status=SUCCESS method=HomepageDOMComparisonTest.compareBaselineWithLivePageLenientThreshold()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@581ac8a8] output={null}]]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterEach -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@483f6d77]" started-at="2025-09-03T14:53:40 EDT" name="tearDown" finished-at="2025-09-03T14:53:40 EDT" duration-ms="258" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@581ac8a8]" started-at="2025-09-05T15:04:04 EDT" name="tearDown" finished-at="2025-09-05T15:04:05 EDT" duration-ms="160" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="tearDownBase()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@483f6d77]" started-at="2025-09-03T14:53:40 EDT" name="tearDownBase" finished-at="2025-09-03T14:53:40 EDT" duration-ms="106" status="PASS">
+        <test-method is-config="true" signature="tearDownBase()[pri:0, instance:org.catalyte.io.tests.unit.HomepageDOMComparisonTest@581ac8a8]" started-at="2025-09-05T15:04:05 EDT" name="tearDownBase" finished-at="2025-09-05T15:04:05 EDT" duration-ms="60" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDownBase -->
       </class> <!-- org.catalyte.io.tests.unit.HomepageDOMComparisonTest -->
       <class name="org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests">
-        <test-method is-config="true" signature="setUpBase()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@ea6147e]" started-at="2025-09-03T14:52:53 EDT" name="setUpBase" finished-at="2025-09-03T14:52:56 EDT" duration-ms="2506" status="PASS">
+        <test-method is-config="true" signature="setUpBase()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:02:54 EDT" name="setUpBase" finished-at="2025-09-05T15:02:56 EDT" duration-ms="1673" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpBase -->
-        <test-method is-config="true" signature="setUpPages()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@ea6147e]" started-at="2025-09-03T14:52:56 EDT" name="setUpPages" finished-at="2025-09-03T14:53:00 EDT" duration-ms="3876" status="PASS">
+        <test-method is-config="true" signature="setUpPages()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:02:56 EDT" name="setUpPages" finished-at="2025-09-05T15:02:58 EDT" duration-ms="2628" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpPages -->
-        <test-method signature="regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@ea6147e]" started-at="2025-09-03T14:53:00 EDT" name="regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality" finished-at="2025-09-03T14:53:26 EDT" duration-ms="25858" status="PASS">
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:02:58 EDT" name="resetState" finished-at="2025-09-05T15:02:59 EDT" duration-ms="922" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method is-config="true" signature="startUrlForThisClass()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:02:59 EDT" name="startUrlForThisClass" finished-at="2025-09-05T15:02:59 EDT" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- startUrlForThisClass -->
+        <test-method signature="faqAccordion_DisplaysExpectedText()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:02:59 EDT" name="faqAccordion_DisplaysExpectedText" finished-at="2025-09-05T15:03:01 EDT" duration-ms="1661" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- faqAccordion_DisplaysExpectedText -->
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:01 EDT" name="afterEach" finished-at="2025-09-05T15:03:01 EDT" duration-ms="2" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=faqAccordion_DisplaysExpectedText status=SUCCESS method=ApprenticeshipsPageTests.faqAccordion_DisplaysExpectedText()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterEach -->
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:01 EDT" name="resetState" finished-at="2025-09-05T15:03:06 EDT" duration-ms="4744" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method is-config="true" signature="startUrlForThisClass()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:06 EDT" name="startUrlForThisClass" finished-at="2025-09-05T15:03:06 EDT" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- startUrlForThisClass -->
+        <test-method signature="regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:06 EDT" name="regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality" finished-at="2025-09-05T15:03:22 EDT" duration-ms="16184" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality -->
-        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@ea6147e]" started-at="2025-09-03T14:53:26 EDT" name="afterEach" finished-at="2025-09-03T14:53:26 EDT" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:22 EDT" name="afterEach" finished-at="2025-09-05T15:03:22 EDT" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality status=SUCCESS method=ApprenticeshipsPageTests.regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@ea6147e] output={null}]]]>
+                <![CDATA[[TestResult name=regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality status=SUCCESS method=ApprenticeshipsPageTests.regressionTestForAllApprenticeshipLinks_CheckNavigationFunctionality()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4] output={null}]]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterEach -->
-        <test-method signature="verifyAllKeyElementsOfHowItWorksSectionPresent()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@ea6147e]" started-at="2025-09-03T14:53:26 EDT" name="verifyAllKeyElementsOfHowItWorksSectionPresent" finished-at="2025-09-03T14:53:26 EDT" duration-ms="70" status="PASS">
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:22 EDT" name="resetState" finished-at="2025-09-05T15:03:23 EDT" duration-ms="647" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method is-config="true" signature="startUrlForThisClass()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:23 EDT" name="startUrlForThisClass" finished-at="2025-09-05T15:03:23 EDT" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- startUrlForThisClass -->
+        <test-method signature="testAllFaqsButtonDisplayedAndFunctionsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:23 EDT" name="testAllFaqsButtonDisplayedAndFunctionsLenient" finished-at="2025-09-05T15:03:24 EDT" duration-ms="1573" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testAllFaqsButtonDisplayedAndFunctionsLenient -->
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:24 EDT" name="afterEach" finished-at="2025-09-05T15:03:24 EDT" duration-ms="0" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=testAllFaqsButtonDisplayedAndFunctionsLenient status=SUCCESS method=ApprenticeshipsPageTests.testAllFaqsButtonDisplayedAndFunctionsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterEach -->
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:24 EDT" name="resetState" finished-at="2025-09-05T15:03:25 EDT" duration-ms="639" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method is-config="true" signature="startUrlForThisClass()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:25 EDT" name="startUrlForThisClass" finished-at="2025-09-05T15:03:25 EDT" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- startUrlForThisClass -->
+        <test-method signature="verifyAllKeyElementsOfHowItWorksSectionPresent()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:25 EDT" name="verifyAllKeyElementsOfHowItWorksSectionPresent" finished-at="2025-09-05T15:03:25 EDT" duration-ms="104" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- verifyAllKeyElementsOfHowItWorksSectionPresent -->
-        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@ea6147e]" started-at="2025-09-03T14:53:26 EDT" name="afterEach" finished-at="2025-09-03T14:53:26 EDT" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:25 EDT" name="afterEach" finished-at="2025-09-05T15:03:25 EDT" duration-ms="1" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=verifyAllKeyElementsOfHowItWorksSectionPresent status=SUCCESS method=ApprenticeshipsPageTests.verifyAllKeyElementsOfHowItWorksSectionPresent()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@ea6147e] output={null}]]]>
+                <![CDATA[[TestResult name=verifyAllKeyElementsOfHowItWorksSectionPresent status=SUCCESS method=ApprenticeshipsPageTests.verifyAllKeyElementsOfHowItWorksSectionPresent()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4] output={null}]]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterEach -->
-        <test-method is-config="true" signature="tearDownBase()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@ea6147e]" started-at="2025-09-03T14:53:26 EDT" name="tearDownBase" finished-at="2025-09-03T14:53:26 EDT" duration-ms="289" status="PASS">
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:25 EDT" name="resetState" finished-at="2025-09-05T15:03:26 EDT" duration-ms="790" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method is-config="true" signature="startUrlForThisClass()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:26 EDT" name="startUrlForThisClass" finished-at="2025-09-05T15:03:26 EDT" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- startUrlForThisClass -->
+        <test-method signature="verifyAllOpportunityMetricsElementsPresent()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:26 EDT" name="verifyAllOpportunityMetricsElementsPresent" finished-at="2025-09-05T15:03:26 EDT" duration-ms="175" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- verifyAllOpportunityMetricsElementsPresent -->
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:26 EDT" name="afterEach" finished-at="2025-09-05T15:03:26 EDT" duration-ms="0" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=verifyAllOpportunityMetricsElementsPresent status=SUCCESS method=ApprenticeshipsPageTests.verifyAllOpportunityMetricsElementsPresent()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterEach -->
+        <test-method is-config="true" signature="tearDownBase()[pri:0, instance:org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests@7a419da4]" started-at="2025-09-05T15:03:26 EDT" name="tearDownBase" finished-at="2025-09-05T15:03:26 EDT" duration-ms="268" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDownBase -->
       </class> <!-- org.catalyte.io.tests.scenarios.ApprenticeshipsPageTests -->
       <class name="org.catalyte.io.tests.scenarios.HireApprenticeSectionTests">
-        <test-method is-config="true" signature="setUpBase()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:26 EDT" name="setUpBase" finished-at="2025-09-03T14:53:27 EDT" duration-ms="1040" status="PASS">
+        <test-method is-config="true" signature="setUpBase()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:26 EDT" name="setUpBase" finished-at="2025-09-05T15:03:27 EDT" duration-ms="1251" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpBase -->
-        <test-method is-config="true" signature="setUpPages()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:27 EDT" name="setUpPages" finished-at="2025-09-03T14:53:30 EDT" duration-ms="2891" status="PASS">
+        <test-method is-config="true" signature="setUpPages()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:27 EDT" name="setUpPages" finished-at="2025-09-05T15:03:30 EDT" duration-ms="3070" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpPages -->
-        <test-method is-config="true" signature="resetWarnings()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="resetWarnings" finished-at="2025-09-03T14:53:30 EDT" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:30 EDT" name="resetState" finished-at="2025-09-05T15:03:32 EDT" duration-ms="1378" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method is-config="true" signature="resetWarnings()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:32 EDT" name="resetWarnings" finished-at="2025-09-05T15:03:32 EDT" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- resetWarnings -->
-        <test-method signature="testAccordionsExistLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="testAccordionsExistLenient" finished-at="2025-09-03T14:53:30 EDT" duration-ms="85" status="PASS">
+        <test-method is-config="true" signature="startUrlForThisClass()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:32 EDT" name="startUrlForThisClass" finished-at="2025-09-05T15:03:32 EDT" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testAccordionsExistLenient -->
-        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="afterEach" finished-at="2025-09-03T14:53:30 EDT" duration-ms="0" status="PASS">
+        </test-method> <!-- startUrlForThisClass -->
+        <test-method signature="faqAccordion_ExistsAndDisplaysExpectedText()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:32 EDT" name="faqAccordion_ExistsAndDisplaysExpectedText" finished-at="2025-09-05T15:03:34 EDT" duration-ms="1750" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- faqAccordion_ExistsAndDisplaysExpectedText -->
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:34 EDT" name="afterEach" finished-at="2025-09-05T15:03:34 EDT" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=testAccordionsExistLenient status=SUCCESS method=HireApprenticeSectionTests.testAccordionsExistLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb] output={null}]]]>
+                <![CDATA[[TestResult name=faqAccordion_ExistsAndDisplaysExpectedText status=SUCCESS method=HireApprenticeSectionTests.faqAccordion_ExistsAndDisplaysExpectedText()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1] output={null}]]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterEach -->
-        <test-method is-config="true" signature="resetWarnings()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="resetWarnings" finished-at="2025-09-03T14:53:30 EDT" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:34 EDT" name="resetState" finished-at="2025-09-05T15:03:34 EDT" duration-ms="712" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method is-config="true" signature="resetWarnings()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:34 EDT" name="resetWarnings" finished-at="2025-09-05T15:03:34 EDT" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- resetWarnings -->
-        <test-method signature="testImagesExistLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="testImagesExistLenient" finished-at="2025-09-03T14:53:30 EDT" duration-ms="87" status="PASS">
+        <test-method is-config="true" signature="startUrlForThisClass()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:34 EDT" name="startUrlForThisClass" finished-at="2025-09-05T15:03:34 EDT" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- startUrlForThisClass -->
+        <test-method signature="testAllFaqsButtonDisplayedAndFunctionsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:34 EDT" name="testAllFaqsButtonDisplayedAndFunctionsLenient" finished-at="2025-09-05T15:03:35 EDT" duration-ms="901" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testAllFaqsButtonDisplayedAndFunctionsLenient -->
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:35 EDT" name="afterEach" finished-at="2025-09-05T15:03:35 EDT" duration-ms="1" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=testAllFaqsButtonDisplayedAndFunctionsLenient status=SUCCESS method=HireApprenticeSectionTests.testAllFaqsButtonDisplayedAndFunctionsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterEach -->
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:35 EDT" name="resetState" finished-at="2025-09-05T15:03:36 EDT" duration-ms="732" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method is-config="true" signature="resetWarnings()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:36 EDT" name="resetWarnings" finished-at="2025-09-05T15:03:36 EDT" duration-ms="2" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetWarnings -->
+        <test-method is-config="true" signature="startUrlForThisClass()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:36 EDT" name="startUrlForThisClass" finished-at="2025-09-05T15:03:36 EDT" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- startUrlForThisClass -->
+        <test-method signature="testImagesExistLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:36 EDT" name="testImagesExistLenient" finished-at="2025-09-05T15:03:36 EDT" duration-ms="140" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testImagesExistLenient -->
-        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="afterEach" finished-at="2025-09-03T14:53:30 EDT" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:36 EDT" name="afterEach" finished-at="2025-09-05T15:03:36 EDT" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=testImagesExistLenient status=SUCCESS method=HireApprenticeSectionTests.testImagesExistLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb] output={null}]]]>
+                <![CDATA[[TestResult name=testImagesExistLenient status=SUCCESS method=HireApprenticeSectionTests.testImagesExistLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1] output={null}]]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterEach -->
-        <test-method is-config="true" signature="resetWarnings()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="resetWarnings" finished-at="2025-09-03T14:53:30 EDT" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:36 EDT" name="resetState" finished-at="2025-09-05T15:03:37 EDT" duration-ms="656" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method is-config="true" signature="resetWarnings()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:37 EDT" name="resetWarnings" finished-at="2025-09-05T15:03:37 EDT" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- resetWarnings -->
-        <test-method signature="testMenuTextItemsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="testMenuTextItemsLenient" finished-at="2025-09-03T14:53:30 EDT" duration-ms="30" status="PASS">
+        <test-method is-config="true" signature="startUrlForThisClass()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:37 EDT" name="startUrlForThisClass" finished-at="2025-09-05T15:03:37 EDT" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- startUrlForThisClass -->
+        <test-method signature="testMenuTextItemsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:37 EDT" name="testMenuTextItemsLenient" finished-at="2025-09-05T15:03:37 EDT" duration-ms="59" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testMenuTextItemsLenient -->
-        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="afterEach" finished-at="2025-09-03T14:53:30 EDT" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:37 EDT" name="afterEach" finished-at="2025-09-05T15:03:37 EDT" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=testMenuTextItemsLenient status=SUCCESS method=HireApprenticeSectionTests.testMenuTextItemsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb] output={null}]]]>
+                <![CDATA[[TestResult name=testMenuTextItemsLenient status=SUCCESS method=HireApprenticeSectionTests.testMenuTextItemsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1] output={null}]]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterEach -->
-        <test-method is-config="true" signature="resetWarnings()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="resetWarnings" finished-at="2025-09-03T14:53:30 EDT" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:37 EDT" name="resetState" finished-at="2025-09-05T15:03:37 EDT" duration-ms="580" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method is-config="true" signature="resetWarnings()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:37 EDT" name="resetWarnings" finished-at="2025-09-05T15:03:37 EDT" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- resetWarnings -->
-        <test-method signature="testVideosExistLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="testVideosExistLenient" finished-at="2025-09-03T14:53:30 EDT" duration-ms="69" status="PASS">
+        <test-method is-config="true" signature="startUrlForThisClass()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:37 EDT" name="startUrlForThisClass" finished-at="2025-09-05T15:03:37 EDT" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- startUrlForThisClass -->
+        <test-method signature="testVideosExistLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:37 EDT" name="testVideosExistLenient" finished-at="2025-09-05T15:03:38 EDT" duration-ms="71" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testVideosExistLenient -->
-        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="afterEach" finished-at="2025-09-03T14:53:30 EDT" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:38 EDT" name="afterEach" finished-at="2025-09-05T15:03:38 EDT" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=testVideosExistLenient status=SUCCESS method=HireApprenticeSectionTests.testVideosExistLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb] output={null}]]]>
+                <![CDATA[[TestResult name=testVideosExistLenient status=SUCCESS method=HireApprenticeSectionTests.testVideosExistLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1] output={null}]]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterEach -->
-        <test-method is-config="true" signature="resetWarnings()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="resetWarnings" finished-at="2025-09-03T14:53:30 EDT" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="resetState()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:38 EDT" name="resetState" finished-at="2025-09-05T15:03:38 EDT" duration-ms="601" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetState -->
+        <test-method is-config="true" signature="resetWarnings()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:38 EDT" name="resetWarnings" finished-at="2025-09-05T15:03:38 EDT" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- resetWarnings -->
-        <test-method signature="testWorkWithUsButtonDisplayedAndFunctionsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:30 EDT" name="testWorkWithUsButtonDisplayedAndFunctionsLenient" finished-at="2025-09-03T14:53:32 EDT" duration-ms="1354" status="PASS">
+        <test-method is-config="true" signature="startUrlForThisClass()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:38 EDT" name="startUrlForThisClass" finished-at="2025-09-05T15:03:38 EDT" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- startUrlForThisClass -->
+        <test-method signature="testWorkWithUsButtonDisplayedAndFunctionsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:38 EDT" name="testWorkWithUsButtonDisplayedAndFunctionsLenient" finished-at="2025-09-05T15:03:39 EDT" duration-ms="884" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testWorkWithUsButtonDisplayedAndFunctionsLenient -->
-        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:32 EDT" name="afterEach" finished-at="2025-09-03T14:53:32 EDT" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="afterEach(org.testng.ITestResult)[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:39 EDT" name="afterEach" finished-at="2025-09-05T15:03:39 EDT" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=testWorkWithUsButtonDisplayedAndFunctionsLenient status=SUCCESS method=HireApprenticeSectionTests.testWorkWithUsButtonDisplayedAndFunctionsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb] output={null}]]]>
+                <![CDATA[[TestResult name=testWorkWithUsButtonDisplayedAndFunctionsLenient status=SUCCESS method=HireApprenticeSectionTests.testWorkWithUsButtonDisplayedAndFunctionsLenient()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1] output={null}]]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterEach -->
-        <test-method is-config="true" signature="tearDownBase()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@759d26fb]" started-at="2025-09-03T14:53:32 EDT" name="tearDownBase" finished-at="2025-09-03T14:53:32 EDT" duration-ms="178" status="PASS">
+        <test-method is-config="true" signature="tearDownBase()[pri:0, instance:org.catalyte.io.tests.scenarios.HireApprenticeSectionTests@10d307f1]" started-at="2025-09-05T15:03:39 EDT" name="tearDownBase" finished-at="2025-09-05T15:03:39 EDT" duration-ms="269" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDownBase -->
