@@ -23,23 +23,35 @@ jobs:
 
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
+
       - name: Set up ChromeDriver
         uses: nanasess/setup-chromedriver@v2
 
       - name: Run Selenium tests
-        run: mvn -q -DskipTests=false clean test
+        run: mvn -q -DskipTests=false -Dallure.results.directory=./target/allure-results clean test
         working-directory: ./src
 
-      - name: Sanity check Allure results
+      # Discover where the adapter wrote results; normalize to target/
+      - name: Locate and normalize Allure results
         if: always()
         run: |
-          echo "Expecting results in ./src/target/allure-results"
+          echo "Searching for any allure-results directories..."
+          find . -type d -name "allure-results" -maxdepth 4 -print
+          # If results landed in ./src/allure-results (legacy default), move them
+          if [ -d ./src/allure-results ]; then
+            echo "Found ./src/allure-results — moving to ./src/target/allure-results"
+            mkdir -p ./src/target/allure-results
+            shopt -s nullglob
+            mv ./src/allure-results/* ./src/target/allure-results/ || true
+            rmdir ./src/allure-results || true
+          fi
+          echo "Final contents of ./src/target/allure-results:"
           ls -la ./src/target/allure-results || true
-          echo "Zero-byte files (if any):"
+          echo "Removing zero-byte files (if any)..."
           find ./src/target/allure-results -type f -size 0 -print -delete || true
 
       - name: Generate Allure report
-        run: mvn -q allure:report
+        run: mvn -q -Dallure.results.directory=./target/allure-results allure:report
         working-directory: ./src
 
       - name: Show generated Allure site

@@ -71,6 +71,10 @@
           </properties>
           <!-- IMPORTANT: do NOT let an empty testng.xml be auto-used -->
           <suiteXmlFiles combine.children="append"/>
+          <systemPropertyVariables>
+            <!-- Force adapter to write under target/ -->
+            <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
 
