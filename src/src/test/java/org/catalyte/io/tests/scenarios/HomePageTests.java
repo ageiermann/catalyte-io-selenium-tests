@@ -1,6 +1,7 @@
 package org.catalyte.io.tests.scenarios;
 
 import io.qameta.allure.testng.AllureTestNg;
+import java.util.ArrayList;
 import java.util.List;
 import org.catalyte.io.pages.HomePage;
 import org.catalyte.io.tests.unit.BaseUiTest;
@@ -48,5 +49,48 @@ public class HomePageTests extends BaseUiTest {
         currentUrl.contains("/about/contact-sales/"),
         "Button did not navigate to expected page. Current URL: " + currentUrl
     );
+  }
+
+  @Test
+  public void verifyAllInfoboxesPresent() {
+    for (WebElement t : page.getTopHomepageInfoboxes()) {
+      checkElement(t::isDisplayed, "One or more top row infoboxes missing");
+    }
+    for (WebElement b : page.getBottomHomepageInfoboxes()) {
+      checkElement(b::isDisplayed, "One or more bottom row infoboxes missing");
+    }
+  }
+
+  @Test
+  public void verifyDividerPresentAndButtonFunctionsLenient() {
+    checkElement(() -> page.getPartnerWithUsButton().isDisplayed(), "Homepage divider button missing; assume divider also missing");
+    page.clickPartnerWithUsButton();
+    getWait().until(ExpectedConditions.urlContains("/about/"));
+    String currentUrl = driver.getCurrentUrl().toLowerCase();
+    org.testng.Assert.assertTrue(
+        currentUrl.contains("/about/contact-sales/"),
+        "Button did not navigate to expected page. Current URL: " + currentUrl
+    );
+  }
+
+  @Test
+  public void verifyAllClientTypeSectionsPresentWithChildElements() {
+    List<WebElement> clientTypeSections = new ArrayList<>();
+    clientTypeSections.add(page.getHomepageClientTypeHeading());
+    clientTypeSections.add(page.getHomepageClientTypeEnterprise());
+    clientTypeSections.add(page.getHomepageClientTypeGovernment());
+    clientTypeSections.add(page.getHomepageClientTypeStartups());
+    clientTypeSections.add(page.getHomepageClientTypePrivateEquity());
+
+    for(WebElement section : clientTypeSections) {
+      if(!section.isDisplayed()) {
+        warnings.add("Client type section missing. Check page for specifics");
+        logger.warning("Client type section missing. Check page for specifics");
+      }
+      else for(WebElement e : page.getClientTypeSectionElements(section)) {
+        checkElement(e::isDisplayed, "Client type section " + section + "missing one"
+            + "or more child elements");
+      }
+    }
   }
 }

@@ -7,12 +7,23 @@ import org.openqa.selenium.WebElement;
 
 public class HomePage extends Page {
 
-  //TODO: add section checks/tests
+  //TODO: finish engagement models section
 
   private final By accordionTalent = By.id("what-if-i-need-more-than-apprentice-talent");
   private final By industriesAccordion = By.id("what-industries-do-you-provide-talent-for");
   private final By hireAccordion = By.id("how-can-i-hire-catalyte-talent");
+
   private final By homepageHeadingSection = By.cssSelector(".elementor-element-3d4a7b62");
+
+  private final By homepageInfoboxesSectionTop = By.cssSelector(".elementor-element-3447365");
+  private final By homepageInfoboxesSectionBottom = By.cssSelector(".elementor-element-b69b593");
+  private final By homepageMidpointDivider = By.cssSelector(".elementor-element-500b262f");
+
+  private final By homepageClientTypeSectionHeading = By.cssSelector(".elementor-element-dc546c3");
+  private final By homepageClientTypeSectionEnterprise = By.cssSelector(".elementor-element-13797889");
+  private final By homepageClientTypeSectionGovernment = By.cssSelector(".elementor-element-47e9e0f7");
+  private final By homepageClientTypeSectionStartups = By.cssSelector(".elementor-element-783863a");
+  private final By homepageClientTypeSectionPrivateEquity = By.cssSelector(".elementor-element-50afc0c");
 
   public HomePage(WebDriver driver) {
     super(driver);
@@ -41,5 +52,48 @@ public class HomePage extends Page {
   public void clickGetStartedButton(){
     safeClick(getGetStartedButton());
     dismissCookieIfPresent();
+  }
+
+  public List<WebElement> getTopHomepageInfoboxes() {
+    return driver.findElement(homepageInfoboxesSectionTop).findElements(By.cssSelector(".elementor-column"));
+  }
+
+  public List<WebElement> getBottomHomepageInfoboxes() {
+    return driver.findElement(homepageInfoboxesSectionBottom).findElements(By.cssSelector(".elementor-column"));
+  }
+
+  public WebElement getPartnerWithUsButton() {
+    return driver.findElement(homepageMidpointDivider)
+        .findElement(By.cssSelector(".elementor-widget-button")).findElement(By.cssSelector(".elementor-button"));
+  }
+
+  public void clickPartnerWithUsButton() {
+    safeClick(getPartnerWithUsButton());
+    dismissCookieIfPresent();
+  }
+
+  public WebElement getHomepageClientTypeHeading() {
+    return driver.findElement(homepageClientTypeSectionHeading);
+  }
+
+  public WebElement getHomepageClientTypeEnterprise() {
+    return driver.findElement(homepageClientTypeSectionEnterprise);
+  }
+
+  public WebElement getHomepageClientTypeGovernment() {
+    return driver.findElement(homepageClientTypeSectionGovernment);
+  }
+
+  public WebElement getHomepageClientTypeStartups() {
+    return driver.findElement(homepageClientTypeSectionStartups);
+  }
+
+  public WebElement getHomepageClientTypePrivateEquity() {
+    return driver.findElement(homepageClientTypeSectionPrivateEquity);
+  }
+
+  //Helper method for client type sections
+  public List<WebElement> getClientTypeSectionElements(WebElement section){
+    return section.findElements(By.cssSelector("elementor-element"));
   }
 }
