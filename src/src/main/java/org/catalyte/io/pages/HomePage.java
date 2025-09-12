@@ -4,10 +4,9 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.locators.RelativeLocator;
 
 public class HomePage extends Page {
-
-  //TODO: finish engagement models section
 
   private final By accordionTalent = By.id("what-if-i-need-more-than-apprentice-talent");
   private final By industriesAccordion = By.id("what-industries-do-you-provide-talent-for");
@@ -24,6 +23,9 @@ public class HomePage extends Page {
   private final By homepageClientTypeSectionGovernment = By.cssSelector(".elementor-element-47e9e0f7");
   private final By homepageClientTypeSectionStartups = By.cssSelector(".elementor-element-783863a");
   private final By homepageClientTypeSectionPrivateEquity = By.cssSelector(".elementor-element-50afc0c");
+
+  private final By homepageEngagementModelsHeading = By.cssSelector(".elementor-element-635718f9");
+  private final By homepageEngagementModelsSection = By.cssSelector(".elementor-element-1b51c35d");
 
   public HomePage(WebDriver driver) {
     super(driver);
@@ -92,8 +94,26 @@ public class HomePage extends Page {
     return driver.findElement(homepageClientTypeSectionPrivateEquity);
   }
 
-  //Helper method for client type sections
-  public List<WebElement> getClientTypeSectionElements(WebElement section){
-    return section.findElements(By.cssSelector("elementor-element"));
+  public WebElement getHomepageEngagementModelsHeading() {
+    return driver.findElement(homepageEngagementModelsHeading);
+  }
+
+  public WebElement getHomepageEngagementModelsSection() {
+    return driver.findElement(homepageEngagementModelsSection);
+  }
+
+  public WebElement getEngagementModelsLearnMoreButton() {
+    return driver.findElement(RelativeLocator.with(By.cssSelector(".elementor-button"))
+        .below(getHomepageEngagementModelsSection()));
+  }
+
+  public void clickEngagementModelsButton() {
+    safeClick(getEngagementModelsLearnMoreButton());
+    dismissCookieIfPresent();
+  }
+
+  //Helper method for client type and engagement sections
+  public List<WebElement> getChildElements(WebElement section){
+    return section.findElements(By.cssSelector(".elementor-element"));
   }
 }
