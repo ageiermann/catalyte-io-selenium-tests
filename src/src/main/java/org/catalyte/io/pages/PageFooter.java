@@ -6,6 +6,7 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.locators.RelativeLocator;
 
 public class PageFooter extends Page{
 
@@ -52,5 +53,29 @@ public class PageFooter extends Page{
 
   public List<WebElement> getChildElements(WebElement section){
     return section.findElements(By.cssSelector(".elementor-element"));
+  }
+
+  @Override
+  public String normalize(String s){
+    return (s == null || s.isBlank()) ? "/" : (s.endsWith("/") ? s : s + "/");
+  }
+
+
+  //Nav menu helpers
+  public List<WebElement> getFooterNavMenuHeadings() {
+    return getPageFooterSectionBottom().findElements(By.cssSelector(".elementor-widget-heading"));
+  }
+
+  public WebElement getFooterNavMenu(WebElement heading) {
+    return driver.findElement(RelativeLocator.with(By.cssSelector(".elementor-widget-nav-menu")).near(heading).above(getPageFooterSectionLegal()));
+  }
+
+  public List<WebElement> getFooterNavMenuItems(WebElement menu) {
+    return driver.findElements(RelativeLocator.with(By.cssSelector(".menu-link")).below(menu));
+  }
+
+  public void clickNavMenuLink(WebElement menuItem){
+    safeClick(menuItem);
+    dismissCookieIfPresent();
   }
 }

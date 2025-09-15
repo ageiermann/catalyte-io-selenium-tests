@@ -195,7 +195,7 @@ public class Page {
   }
 
   // --- normalize helper (handles bullets/nbsp/casing/whitespace) ---
-  protected static String normalize(String s) {
+  protected String normalize(String s) {
     if (s == null) return "";
     return s.replace('\u00A0',' ')         // nbsp -> space
         .replace('\u2022',' ')         // bullet -> space
