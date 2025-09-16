@@ -83,7 +83,7 @@ public class PageFooterTests extends BaseUiTest{
       if (title.equalsIgnoreCase("Follow")) continue; // skip social
       WebElement col = h.findElement(By.xpath("./ancestor::div[contains(@class,'elementor-top-column')]"));
       // visible UL (ignore hidden duplicate)
-      Optional<WebElement> ul = col.findElements(By.cssSelector("nav.elementor-nav-menu__container ul"))
+      <WebElement> ul = col.findElements(By.cssSelector("nav.elementor-nav-menu__container ul"))
           .stream().filter(WebElement::isDisplayed).findFirst();
       if (ul.isEmpty()) continue;
       List<String> hrefs = ul.get().findElements(By.cssSelector("a[href]")).stream()
