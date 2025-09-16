@@ -10,10 +10,13 @@ import org.catalyte.io.utils.LoggerUtil;
 import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
@@ -51,25 +54,26 @@ public abstract class BaseUiTest {
    */
   @BeforeClass(alwaysRun = true)
   public final void setUpBase() throws Exception {
-    ChromeOptions options = new ChromeOptions();
+    ChromeOptions opts = new ChromeOptions();
 
     // Stable flags for CI runners
-    options.addArguments(
-        "--headless=new",
-        "--no-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu",
-        "--window-size=" + defaultWindowSize().width + "," + defaultWindowSize().height
-    );
+    opts.setPageLoadStrategy(PageLoadStrategy.EAGER);     // don't wait for every subresource
+    opts.addArguments("--headless=new");                  // headless in CI
+    opts.addArguments("--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage"); // CI stability
+    opts.addArguments("--disable-extensions", "--disable-infobars");
+    opts.addArguments("--blink-settings=imagesEnabled=false"); // lighter pages
 
     // Make the profile path unique for each test class + CI run
     String runId = System.getenv().getOrDefault("GITHUB_RUN_ID", String.valueOf(System.nanoTime()));
     userDataDir = Files.createTempDirectory(
         "chrome-prof-" + getClass().getSimpleName() + "-" + runId + "-");
-    options.addArguments("--user-data-dir=" + userDataDir.toAbsolutePath());
+    opts.addArguments("--user-data-dir=" + userDataDir.toAbsolutePath());
 
-    driver = new ChromeDriver(options);
+    driver = new ChromeDriver(opts);
     wait = new WebDriverWait(driver, Duration.ofSeconds(defaultTimeoutSeconds()));
+
+    driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(12));
+    driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(10));
   }
 
   //Resetting driver state per method to stop flakiness
@@ -97,6 +101,27 @@ public abstract class BaseUiTest {
    */
   protected void open(String url) {
     driver.get(url);
+  }
+
+  //Helpers to fix browser timeouts
+  protected void restartDriver() {
+    try { driver.quit(); } catch (Exception ignore) {}
+    // same ChromeOptions as @BeforeClass
+    ChromeOptions opts = new ChromeOptions();
+    opts.setPageLoadStrategy(PageLoadStrategy.EAGER);
+    opts.addArguments("--headless=new","--disable-gpu","--no-sandbox","--disable-dev-shm-usage",
+        "--disable-extensions","--disable-infobars","--blink-settings=imagesEnabled=false");
+    driver = new ChromeDriver(opts);
+    driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(12));
+    driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(10));
+  }
+  protected void safeOpen(String url) {
+    try {
+      driver.get(url);
+    } catch (WebDriverException e) {
+      restartDriver();               // rebuild and retry once
+      driver.get(url);
+    }
   }
 
   /**
