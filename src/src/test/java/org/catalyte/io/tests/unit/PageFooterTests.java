@@ -10,11 +10,11 @@ import java.util.Map;
 import java.util.Objects;
 import org.catalyte.io.pages.PageFooter;
 import org.catalyte.io.utils.LocatorMapper;
+import org.catalyte.io.utils.StringNormalizer;
 import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -27,12 +27,13 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 @Listeners({AllureTestNg.class, TestListener.class})
-public class PageFooterTests extends BaseUiTest{
+public class PageFooterTests extends BaseUiTest {
 
+  private final String startPageUrl = "https://www.catalyte.io/";
   private PageFooter footer;
   private LocatorMapper mapper;
+  private StringNormalizer normalizer;
   private List<String> warnings;
-  private final String startPageUrl = "https://www.catalyte.io/";
 
   @BeforeClass(alwaysRun = true)
   public void setUpPages() {
@@ -43,11 +44,14 @@ public class PageFooterTests extends BaseUiTest{
     footer = new PageFooter(driver);
     mapper = new LocatorMapper(footer);
     warnings = new ArrayList<>();
+    normalizer = new StringNormalizer();
   }
 
   @BeforeMethod(alwaysRun = true)
   @Override
-  protected String startUrlForThisClass() { return startPageUrl; }
+  protected String startUrlForThisClass() {
+    return startPageUrl;
+  }
 
   // === Methods For Footer Common To All Pages === //
   @Test
@@ -80,7 +84,9 @@ public class PageFooterTests extends BaseUiTest{
     Map<String, List<String>> menus = new LinkedHashMap<>();
     for (WebElement headingEl : footer.getNavMenuHeadings()) {
       String headingTitle = headingEl.getText().trim();
-      if (headingTitle.equalsIgnoreCase("Follow")) continue;
+      if (headingTitle.equalsIgnoreCase("Follow")) {
+        continue;
+      }
 
       mapper.menuBy(headingTitle).ifPresent(menuBy -> {
         WebElement menu = wait.until(ExpectedConditions.visibilityOfElementLocated(menuBy));
@@ -96,42 +102,56 @@ public class PageFooterTests extends BaseUiTest{
 
       for (String href : entry.getValue()) {
         driver.get(startPageUrl);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("section.footer-menu")));
+        wait.until(
+            ExpectedConditions.presenceOfElementLocated(By.cssSelector("section.footer-menu")));
 
         By menuBy = mapper.menuBy(heading).orElseThrow();
         WebElement menu = wait.until(ExpectedConditions.visibilityOfElementLocated(menuBy));
 
-        By linkBy = By.cssSelector("a.menu-link[href=\"" + cssEscape(href) + "\"]");
+        By linkBy = By.cssSelector("a.menu-link[href=\"" + normalizer.cssEscape(href) + "\"]");
         WebElement link = menu.findElement(linkBy);
 
         // force same-tab
-        ((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('target');", link);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('target');",
+            link);
 
         String before = driver.getCurrentUrl();
+        logger.info("Testing URL navigation via " + link.getText() + " to " + href);
         try {
           footer.clickNavMenuLink(link);
         } catch (ElementClickInterceptedException e) {
           ((JavascriptExecutor) driver).executeScript("arguments[0].click();", link);
-        }
-        catch (WebDriverException died) {
+        } catch (WebDriverException died) {
           safeOpen(startPageUrl);
-          wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("section.footer-menu")));
+          wait.until(
+              ExpectedConditions.presenceOfElementLocated(By.cssSelector("section.footer-menu")));
           menu = wait.until(ExpectedConditions.visibilityOfElementLocated(menuBy));
           link = menu.findElement(linkBy);
-          ((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('target');", link);
+          ((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('target');",
+              link);
           footer.clickNavMenuLink(link);
         }
+        boolean changed = footer.waitForUrlChangeOrHash(
+            new WebDriverWait(driver, Duration.ofSeconds(10)), before, href);
+        if (changed) {
+          try {
+            ((JavascriptExecutor) driver).executeScript("window.stop();");
+          }
+          catch (Exception ignored) {
+            logger.warning("URL " + href + "caused page timeout. Ignoring...");
+            failures.add(String.format("[Footer][%s] %s → %s", heading, href, before));
+          }
+        }
 
-        boolean changed = footer.waitForUrlChangeOrHash(wait, before, href);
         String currentUrl = driver.getCurrentUrl();
-
         boolean ok = changed && allowedForHeading(heading, currentUrl, href);
-        if (!ok) {
+        if (ok) {
+          logger.info("Navigation to " + href + " successful.");
+        } else {
           failures.add(String.format("[Footer][%s] %s → %s", heading, href, currentUrl));
         }
       }
     }
-
     if (!failures.isEmpty()) {
       String navMenuWarnings = "Footer nav warnings (" + failures.size() + "):\n"
           + String.join("\n", failures);
@@ -142,7 +162,9 @@ public class PageFooterTests extends BaseUiTest{
   }
 
   //==== Footer test helpers ==== //
-  private boolean isPresent(By locator) { return !driver.findElements(locator).isEmpty(); }
+  private boolean isPresent(By locator) {
+    return !driver.findElements(locator).isEmpty();
+  }
 
   private boolean waitForFooter() {
     try {
@@ -150,42 +172,9 @@ public class PageFooterTests extends BaseUiTest{
           ExpectedConditions.presenceOfElementLocated
               (footer.getFooterLocatorsAsList().get(0)));
       return footerElement != null;
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       return false;
     }
-  }
-  private boolean successfullyNavigated(WebElement link, String href, String expected) {
-
-    // Force same tab
-    ((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('target');", link);
-    String before = driver.getCurrentUrl();
-    long t0 = System.nanoTime();
-    Duration maxWait = Duration.ofSeconds(10);
-    boolean navigated = false;
-    String afterUrl;
-
-    try {
-      try { link.click(); }
-      catch (ElementClickInterceptedException e) {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", link);
-      }
-
-      if (href.contains("#")) {
-        navigated = new WebDriverWait(driver, maxWait)
-            .until(d -> d.getCurrentUrl().contains("#"));
-      } else {
-        navigated = new WebDriverWait(driver, maxWait)
-            .until(d -> !d.getCurrentUrl().equals(before));
-      }
-    } catch (TimeoutException te) {
-      navigated = false;
-    }
-    if(!urlsMatchLenient(href, driver.getCurrentUrl())){ navigated = false; }
-
-    afterUrl = driver.getCurrentUrl();
-    long ms = (System.nanoTime() - t0) / 1_000_000;
-    return navigated;
   }
 
   private boolean urlsMatchLenient(String expected, String actual) {
@@ -203,20 +192,9 @@ public class PageFooterTests extends BaseUiTest{
   private boolean allowedForHeading(String heading, String actualUrl, String expectedHref) {
     Map<String, List<String>> allowed = mapper.getAllowedUrls();
     List<String> list = allowed.get(heading);
-    if (list == null || list.isEmpty()) return urlsMatchLenient(expectedHref, actualUrl);
+    if (list == null || list.isEmpty()) {
+      return urlsMatchLenient(expectedHref, actualUrl);
+    }
     return list.stream().anyMatch(allow -> urlsMatchLenient(allow, actualUrl));
-  }
-
-  private String normalize(String p){
-    return (p == null || p.isBlank())
-        ? "/"
-        : (p.endsWith("/")
-            ? p
-            : p+"/" );
-  }
-
-  private String cssEscape(String s){
-    return s.replace("\\","\\\\")
-        .replace("\"","\\\"");
   }
 }

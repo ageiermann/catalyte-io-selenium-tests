@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
+import org.catalyte.io.pages.Page;
+import org.catalyte.io.pages.PageFooter;
+import org.catalyte.io.utils.LocatorMapper;
 import org.catalyte.io.utils.LoggerUtil;
 import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.Dimension;
@@ -77,7 +80,9 @@ public abstract class BaseUiTest {
   }
 
   //Resetting driver state per method to stop flakiness
-  protected String startUrlForThisClass() { return "https://google.com"; }
+  protected String startUrlForThisClass() {
+    return "https://google.com";
+  }
 
   @BeforeMethod(alwaysRun = true)
   public void resetState() {
@@ -85,6 +90,7 @@ public abstract class BaseUiTest {
     driver.navigate().to("about:blank");
     driver.get(startUrlForThisClass());
   }
+
   //lazy getter to protect run order
   protected WebDriverWait getWait() {
     if (wait == null) {
@@ -104,24 +110,41 @@ public abstract class BaseUiTest {
   }
 
   //Helpers to fix browser timeouts
-  protected void restartDriver() {
-    try { driver.quit(); } catch (Exception ignore) {}
-    // same ChromeOptions as @BeforeClass
-    ChromeOptions opts = new ChromeOptions();
-    opts.setPageLoadStrategy(PageLoadStrategy.EAGER);
+  protected synchronized void restartDriver() {
+    try { if (driver != null) driver.quit(); }
+    catch (Exception ignored) {}
+
+    this.driver = buildDriver();
+  }
+
+  private WebDriver buildDriver() {
+    org.openqa.selenium.chrome.ChromeOptions opts = new org.openqa.selenium.chrome.ChromeOptions();
+    opts.setPageLoadStrategy(org.openqa.selenium.PageLoadStrategy.EAGER);
     opts.addArguments("--headless=new","--disable-gpu","--no-sandbox","--disable-dev-shm-usage",
         "--disable-extensions","--disable-infobars","--blink-settings=imagesEnabled=false");
-    driver = new ChromeDriver(opts);
-    driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(12));
-    driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(10));
+    org.openqa.selenium.WebDriver d = new org.openqa.selenium.chrome.ChromeDriver(opts);
+    d.manage().timeouts().pageLoadTimeout(java.time.Duration.ofSeconds(12));
+    d.manage().timeouts().scriptTimeout(java.time.Duration.ofSeconds(10));
+    return d;
   }
+
   protected void safeOpen(String url) {
     try {
-      driver.get(url);
+      driver.navigate().to(url);
     } catch (WebDriverException e) {
-      restartDriver();               // rebuild and retry once
-      driver.get(url);
+      if (isDeadSession(e)) { restartDriver(); driver.navigate().to(url); }
+      else {
+        logger.severe("Driver crashed.");
+        throw e;
+      }
     }
+  }
+
+  private boolean isDeadSession(Throwable t) {
+    String msg = String.valueOf(t.getMessage());
+    return msg.contains("Session ID is null") || msg.contains("invalid session id")
+        || msg.contains("disconnected") || msg.contains("target frame detached") ||
+        msg.contains("may have died");
   }
 
   /**

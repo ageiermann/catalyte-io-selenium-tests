@@ -17,9 +17,9 @@ import org.testng.annotations.Test;
 @Listeners({AllureTestNg.class, TestListener.class})
 public class HomePageTests extends BaseUiTest {
 
+  private final String homePageUrl = "https://www.catalyte.io/";
   private HomePage page;
   private List<String> warnings;
-  private final String homePageUrl = "https://www.catalyte.io/";
 
   @BeforeClass(alwaysRun = true)
   public void setUpPages() {
@@ -32,7 +32,9 @@ public class HomePageTests extends BaseUiTest {
 
   @BeforeMethod(alwaysRun = true)
   @Override
-  protected String startUrlForThisClass() { return homePageUrl; }
+  protected String startUrlForThisClass() {
+    return homePageUrl;
+  }
 
   @Test
   public void verifyAllHeadingElementsPresent() {
@@ -40,6 +42,7 @@ public class HomePageTests extends BaseUiTest {
       checkElement(e::isDisplayed, "One or more heading elements missing");
     }
   }
+
   @Test
   public void testGetStartedButtonDisplayedAndFunctionsLenient() {
     checkElement(() -> page.getGetStartedButton().isDisplayed(), "'Get Started' button missing");
@@ -82,14 +85,15 @@ public class HomePageTests extends BaseUiTest {
     clientTypeSections.add(page.getHomepageClientTypeStartups());
     clientTypeSections.add(page.getHomepageClientTypePrivateEquity());
 
-    for(WebElement section : clientTypeSections) {
-      if(!section.isDisplayed()) {
+    for (WebElement section : clientTypeSections) {
+      if (!section.isDisplayed()) {
         warnings.add("Client type section missing. Check page for specifics");
         logger.warning("Client type section missing. Check page for specifics");
-      }
-      else for(WebElement e : page.getChildElements(section)) {
-        checkElement(e::isDisplayed, "Client type section " + section + "missing one"
-            + "or more child elements");
+      } else {
+        for (WebElement e : page.getChildElements(section)) {
+          checkElement(e::isDisplayed, "Client type section " + section + "missing one"
+              + "or more child elements");
+        }
       }
     }
   }
@@ -102,12 +106,13 @@ public class HomePageTests extends BaseUiTest {
 
     checkElement(engagementHeading::isDisplayed, "Engagement models heading text missing");
 
-    if(!engagementSection.isDisplayed()) {
+    if (!engagementSection.isDisplayed()) {
       warnings.add("Engagement models section missing");
       logger.warning("Engagement models section missing");
-    }
-    else for(WebElement e : page.getChildElements(engagementSection)) {
-      checkElement(e::isDisplayed, "One or more engagement models infoboxes missing");
+    } else {
+      for (WebElement e : page.getChildElements(engagementSection)) {
+        checkElement(e::isDisplayed, "One or more engagement models infoboxes missing");
+      }
     }
   }
 

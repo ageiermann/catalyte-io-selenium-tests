@@ -17,9 +17,9 @@ import org.testng.annotations.Test;
 @Listeners({AllureTestNg.class, TestListener.class})
 public class HireApprenticeSectionTests extends BaseUiTest {
 
+  private final String hirePageUrl = "https://www.catalyte.io/hire-talent/hire-apprentices/";
   private HirePage hire;
   private List<String> warnings;
-  private String hirePageUrl = "https://www.catalyte.io/hire-talent/hire-apprentices/";
 
   @BeforeClass(alwaysRun = true)
   public void setUpPages() {   // <-- different name; not overriding anything
@@ -38,7 +38,9 @@ public class HireApprenticeSectionTests extends BaseUiTest {
 
   @BeforeMethod(alwaysRun = true)
   @Override
-  public String startUrlForThisClass() { return hirePageUrl; }
+  public String startUrlForThisClass() {
+    return hirePageUrl;
+  }
 
   @Test
   public void testImagesExistLenient() {
@@ -78,7 +80,8 @@ public class HireApprenticeSectionTests extends BaseUiTest {
   public void faqAccordion_ExistsAndDisplaysExpectedText() {
     String howCanIHire = "How can I hire Catalyte talent?";
     Assert.assertTrue(
-        hire.faqContentContainsAfterAllottedTime(howCanIHire, "We work closely", Duration.ofSeconds(5)),
+        hire.faqContentContainsAfterAllottedTime(howCanIHire, "We work closely",
+            Duration.ofSeconds(5)),
         "FAQ content did not contain expected phrase for: " + howCanIHire
     );
 
@@ -90,16 +93,19 @@ public class HireApprenticeSectionTests extends BaseUiTest {
 
     String whatIndustries = "What industries do you provide talent for?";
     Assert.assertTrue(
-        hire.faqContentContainsAfterAllottedTime(whatIndustries, "clients in many industries", Duration.ofSeconds(5)),
+        hire.faqContentContainsAfterAllottedTime(whatIndustries, "clients in many industries",
+            Duration.ofSeconds(5)),
         "Requirements FAQ missing expected phrase for: " + whatIndustries
     );
 
     String ifNeedMore = "What if I need more than apprentice talent?";
     Assert.assertTrue(
-        hire.faqContentContainsAfterAllottedTime(ifNeedMore, "across all experience levels", Duration.ofSeconds(5)),
+        hire.faqContentContainsAfterAllottedTime(ifNeedMore, "across all experience levels",
+            Duration.ofSeconds(5)),
         "FAQ content did not contain expected phrase for: " + ifNeedMore
     );
   }
+
   @Test
   public void testAllFaqsButtonDisplayedAndFunctionsLenient() {
     checkElement(() -> hire.getAllFaqsButton().isDisplayed(), "'All FAQS' button missing");

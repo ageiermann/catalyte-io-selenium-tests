@@ -72,8 +72,8 @@ public class HomepageDOMComparisonTest extends BaseUiTest {
       String text = e.text().trim();
       if (!text.isEmpty()) {
         boolean exists =
-            updated.select("*:containsOwn(" + text.substring(0, Math.min(10, text.length())) + ")")
-                .size() > 0;
+            !updated.select("*:containsOwn(" + text.substring(0, Math.min(10, text.length())) + ")")
+                .isEmpty();
         if (!exists) {
           logger.warning("Warning: Text might have changed or missing: \"" + text + "\"");
           missingTextCount++;

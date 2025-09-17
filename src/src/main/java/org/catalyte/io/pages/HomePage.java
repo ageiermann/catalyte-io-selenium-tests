@@ -19,10 +19,13 @@ public class HomePage extends Page {
   private final By homepageMidpointDivider = By.cssSelector(".elementor-element-500b262f");
 
   private final By homepageClientTypeSectionHeading = By.cssSelector(".elementor-element-dc546c3");
-  private final By homepageClientTypeSectionEnterprise = By.cssSelector(".elementor-element-13797889");
-  private final By homepageClientTypeSectionGovernment = By.cssSelector(".elementor-element-47e9e0f7");
+  private final By homepageClientTypeSectionEnterprise = By.cssSelector(
+      ".elementor-element-13797889");
+  private final By homepageClientTypeSectionGovernment = By.cssSelector(
+      ".elementor-element-47e9e0f7");
   private final By homepageClientTypeSectionStartups = By.cssSelector(".elementor-element-783863a");
-  private final By homepageClientTypeSectionPrivateEquity = By.cssSelector(".elementor-element-50afc0c");
+  private final By homepageClientTypeSectionPrivateEquity = By.cssSelector(
+      ".elementor-element-50afc0c");
 
   private final By homepageEngagementModelsHeading = By.cssSelector(".elementor-element-635718f9");
   private final By homepageEngagementModelsSection = By.cssSelector(".elementor-element-1b51c35d");
@@ -44,29 +47,34 @@ public class HomePage extends Page {
   }
 
   public List<WebElement> getHomepageHeadingElements() {
-    return driver.findElement(homepageHeadingSection).findElements(By.cssSelector(".elementor-element"));
+    return driver.findElement(homepageHeadingSection)
+        .findElements(By.cssSelector(".elementor-element"));
   }
 
-  public WebElement getGetStartedButton(){
-    return driver.findElement(homepageHeadingSection).findElement(By.cssSelector(".elementor-button"));
+  public WebElement getGetStartedButton() {
+    return driver.findElement(homepageHeadingSection)
+        .findElement(By.cssSelector(".elementor-button"));
   }
 
-  public void clickGetStartedButton(){
+  public void clickGetStartedButton() {
     safeClick(getGetStartedButton());
     dismissCookieIfPresent();
   }
 
   public List<WebElement> getTopHomepageInfoboxes() {
-    return driver.findElement(homepageInfoboxesSectionTop).findElements(By.cssSelector(".elementor-column"));
+    return driver.findElement(homepageInfoboxesSectionTop)
+        .findElements(By.cssSelector(".elementor-column"));
   }
 
   public List<WebElement> getBottomHomepageInfoboxes() {
-    return driver.findElement(homepageInfoboxesSectionBottom).findElements(By.cssSelector(".elementor-column"));
+    return driver.findElement(homepageInfoboxesSectionBottom)
+        .findElements(By.cssSelector(".elementor-column"));
   }
 
   public WebElement getPartnerWithUsButton() {
     return driver.findElement(homepageMidpointDivider)
-        .findElement(By.cssSelector(".elementor-widget-button")).findElement(By.cssSelector(".elementor-button"));
+        .findElement(By.cssSelector(".elementor-widget-button"))
+        .findElement(By.cssSelector(".elementor-button"));
   }
 
   public void clickPartnerWithUsButton() {
@@ -113,7 +121,7 @@ public class HomePage extends Page {
   }
 
   //Helper method for client type and engagement sections
-  public List<WebElement> getChildElements(WebElement section){
+  public List<WebElement> getChildElements(WebElement section) {
     return section.findElements(By.cssSelector(".elementor-element"));
   }
 }

@@ -10,6 +10,13 @@ public class HirePage extends Page {
 
   // Locators
 
+  /* FAQ Accordions */
+  private static final By HIRE_FAQ_ACCORDION_ROOT = By.cssSelector("#eael-adv-accordion-493eab1");
+  private static final By HIRE_FAQ_HEADERS = By.cssSelector(
+      "#eael-adv-accordion-493eab1 .eael-accordion-header");
+  private static final By HIRE_FAQ_HEADER_TEXT_SPAN = By.cssSelector(".eael-accordion-tab-title");
+  private static final By HIRE_FAQ_SECTION_HEADING = By.xpath(
+      "//h3[normalize-space()='Hire Catalyte talent FAQs']");
   private final By textEditors = By.cssSelector(".elementor-widget-text-editor p");
   private final By imageBoxContents = By.cssSelector(".elementor-image-box-content");
   private final By imageBoxText = By.cssSelector(".elementor-image-box-description");
@@ -22,12 +29,6 @@ public class HirePage extends Page {
   private final By testimonialsVideo = By.cssSelector(".elementor-element-38681986");
   private final By aboutAIButton = By.cssSelector(".elementor-button-link .elementor-size-xs");
   private final By allFaqsButtonDiv = By.cssSelector(".elementor-element-457cc16");
-
-  /* FAQ Accordions */
-  private static final By HIRE_FAQ_ACCORDION_ROOT = By.cssSelector("#eael-adv-accordion-493eab1");
-  private static final By HIRE_FAQ_HEADERS = By.cssSelector("#eael-adv-accordion-493eab1 .eael-accordion-header");
-  private static final By HIRE_FAQ_HEADER_TEXT_SPAN = By.cssSelector(".eael-accordion-tab-title");
-  private static final By HIRE_FAQ_SECTION_HEADING = By.xpath("//h3[normalize-space()='Hire Catalyte talent FAQs']");
 
   public HirePage(WebDriver driver) {
     super(driver);
@@ -82,37 +83,42 @@ public class HirePage extends Page {
 
   /* === FAQ Accordion Helpers === */
 
-  /** Find the FAQ header by its visible question text (case/space-insensitive). */
+  /**
+   * Find the FAQ header by its visible question text (case/space-insensitive).
+   */
   private WebElement findFaqHeaderByText(String question) {
     try {
       WebElement heading = find(HIRE_FAQ_SECTION_HEADING);
       scrollToCenter(heading);
-    } catch (Exception ignored) {}
+    } catch (Exception ignored) {
+    }
 
     WebElement root = driver.findElement(HIRE_FAQ_ACCORDION_ROOT);
     var headers = root.findElements(HIRE_FAQ_HEADERS);
 
-    String want = normalize(question);
+    String want = normalizer.normalize(question);
     return headers.stream()
         .filter(h -> {
           String txt = h.findElement(HIRE_FAQ_HEADER_TEXT_SPAN).getText();
-          return normalize(txt).equals(want);
+          return normalizer.normalize(txt).equals(want);
         })
         .findFirst()
         .orElseThrow(() -> new NoSuchElementException("FAQ header not found: " + question));
   }
+
   //Non-flaky replacement for faqContentContains()
-  public boolean faqContentContainsAfterAllottedTime(String question, String expected, java.time.Duration timeout) {
+  public boolean faqContentContainsAfterAllottedTime(String question, String expected,
+      java.time.Duration timeout) {
     WebElement header = findFaqHeaderByText(question);
     return accordionTextEventuallyContains(header, expected, timeout);
   }
 
   /* Locators for FAQs Button */
-  public WebElement getAllFaqsButton(){
+  public WebElement getAllFaqsButton() {
     return find(allFaqsButtonDiv).findElement(By.cssSelector(".elementor-size-xs"));
   }
 
-  public void clickAllFaqsButton(){
+  public void clickAllFaqsButton() {
     safeClick(getAllFaqsButton());
     dismissCookieIfPresent();
   }

@@ -1,16 +1,15 @@
 package org.catalyte.io.pages;
 
 import java.time.Duration;
+import org.catalyte.io.utils.StringNormalizer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -18,6 +17,7 @@ public class Page {
 
   protected final WebDriver driver;
   protected final WebDriverWait wait;
+  protected final StringNormalizer normalizer;
 
   public Page(WebDriver driver) {
     if (driver == null) {
@@ -25,6 +25,7 @@ public class Page {
     }
     this.driver = driver;
     this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    this.normalizer = new StringNormalizer();
   }
 
   protected WebElement find(By locator) {
@@ -45,6 +46,10 @@ public class Page {
     return find(locator).getText();
   }
 
+  /**
+   * Helper methods to fix flaky clicks.
+   **/
+  /* ------------------------------------- */
   public void playVimeoVideo(String widgetCssLocator) throws InterruptedException {
     WebElement overlay = wait.until(ExpectedConditions.elementToBeClickable(
         By.cssSelector(widgetCssLocator + " .elementor-wrapper")));
@@ -66,9 +71,6 @@ public class Page {
     }
     driver.switchTo().defaultContent();
   }
-
-  /** Helper methods to fix flaky clicks. **/
-  /* ------------------------------------- */
 
   /**
    * Scroll element to center of viewport.
@@ -196,19 +198,10 @@ public class Page {
     return panel.getText().toLowerCase().contains(expectedSubstring.toLowerCase());
   }
 
-  // --- normalize helper (handles bullets/nbsp/casing/whitespace) ---
-  protected static String normalize(String s) {
-    if (s == null) return "";
-    return s.replace('\u00A0',' ')         // nbsp -> space
-        .replace('\u2022',' ')         // bullet -> space
-        .replace('\u2013','-')         // en dash -> hyphen (optional)
-        .replace('\u2014','-')         // em dash -> hyphen (optional)
-        .replaceAll("\\s+", " ")       // collapse whitespace
-        .trim()
-        .toLowerCase();
-  }
-  /** Helper to fix flaky accordions.
-  * Expand an accordion header whose panel is linked via aria-controls, and wait until expanded. */
+  /**
+   * Helper to fix flaky accordions. Expand an accordion header whose panel is linked via
+   * aria-controls, and wait until expanded.
+   */
   protected WebElement expandAccordionStable(WebElement headerEl, java.time.Duration timeout) {
     String controlsId = headerEl.getAttribute("aria-controls");
     if (controlsId == null || controlsId.isBlank()) {
@@ -232,16 +225,25 @@ public class Page {
     });
   }
 
-/** Expand via aria-controls, then wait until panel text contains expected (normalized) */
-protected boolean accordionTextEventuallyContains(WebElement headerEl, String expected, java.time.Duration timeout) {
-  WebElement panel = expandAccordionStable(headerEl, timeout);
-  String want = normalize(expected);
-  long end = System.nanoTime() + java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(timeout.toMillis());
-  while (System.nanoTime() < end) {
-    String got = normalize(panel.getText());
-    if (got.contains(want)) return true;
-    try { Thread.sleep(75); } catch (InterruptedException ignored) {}
+  /**
+   * Expand via aria-controls, then wait until panel text contains expected (normalized)
+   */
+  protected boolean accordionTextEventuallyContains(WebElement headerEl, String expected,
+      java.time.Duration timeout) {
+    WebElement panel = expandAccordionStable(headerEl, timeout);
+    String want = normalizer.normalize(expected);
+    long end =
+        System.nanoTime() + java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(timeout.toMillis());
+    while (System.nanoTime() < end) {
+      String got = normalizer.normalize(panel.getText());
+      if (got.contains(want)) {
+        return true;
+      }
+      try {
+        Thread.sleep(75);
+      } catch (InterruptedException ignored) {
+      }
+    }
+    return false;
   }
-  return false;
-}
 }

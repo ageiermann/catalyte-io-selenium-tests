@@ -18,9 +18,9 @@ import org.testng.asserts.SoftAssert;
 @Listeners({AllureTestNg.class, TestListener.class})
 public class ApprenticeshipsPageTests extends BaseUiTest {
 
+  private final String apprenticeshipsPageUrl = "https://www.catalyte.io/apprenticeships/";
   private ApprenticeshipsPage page;
   private List<String> warnings;
-  private String apprenticeshipsPageUrl = "https://www.catalyte.io/apprenticeships/";
 
   @BeforeClass(alwaysRun = true)
   public void setUpPages() {
@@ -34,7 +34,9 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
 
   @BeforeMethod(alwaysRun = true)
   @Override
-  protected String startUrlForThisClass() { return apprenticeshipsPageUrl; }
+  protected String startUrlForThisClass() {
+    return apprenticeshipsPageUrl;
+  }
 
   @Test
   public void verifyAllKeyElementsOfHowItWorksSectionPresent() {
@@ -102,7 +104,8 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
   public void faqAccordion_DisplaysExpectedText() {
     String howDoesItWork = "How does a Catalyte apprenticeship work?";
     Assert.assertTrue(
-        page.faqContentContainsAfterAllottedTime(howDoesItWork, "paid while learning", Duration.ofSeconds(5)),
+        page.faqContentContainsAfterAllottedTime(howDoesItWork, "paid while learning",
+            Duration.ofSeconds(5)),
         "FAQ content did not contain expected phrase for: " + howDoesItWork
     );
 
@@ -114,7 +117,8 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
 
     String applyRequirements = "What are the requirements to apply?";
     Assert.assertTrue(
-        page.faqContentContainsAfterAllottedTime(applyRequirements, "Be at least 18 years old", Duration.ofSeconds(5)),
+        page.faqContentContainsAfterAllottedTime(applyRequirements, "Be at least 18 years old",
+            Duration.ofSeconds(5)),
         "Requirements FAQ missing expected bullet."
     );
 
@@ -126,10 +130,12 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
 
     String needDegree = "Do I need a college degree to apply?";
     Assert.assertTrue(
-        page.faqContentContainsAfterAllottedTime(needDegree, "do not take degrees", Duration.ofSeconds(5)),
+        page.faqContentContainsAfterAllottedTime(needDegree, "do not take degrees",
+            Duration.ofSeconds(5)),
         "FAQ content did not contain expected phrase for: " + needDegree
     );
   }
+
   @Test
   public void testAllFaqsButtonDisplayedAndFunctionsLenient() {
     checkElement(() -> page.getAllFaqsButton().isDisplayed(), "'All FAQS' button missing");

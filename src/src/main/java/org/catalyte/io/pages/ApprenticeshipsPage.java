@@ -15,9 +15,20 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  * "Get Hired" / Apprenticeships Page object.
  **/
 public class ApprenticeshipsPage extends Page {
+
   /* ===== Destination page headings ===== */
   private static final By H1 = By.tagName("h1");
   private static final By H2 = By.tagName("h2");
+  //Apprenticeships cards/links
+  private static final By CARD_TITLE_LINKS = By.cssSelector(
+      "[data-elementor-type='loop-item'].type-apprenticeships h4.elementor-heading-title a"
+  );
+  /**
+   * FAQ accordions
+   **/
+  private static final By FAQ_SECTION = By.cssSelector("#faqs");
+  private static final By ACCORDION_HEADERS = By.cssSelector(
+      "#eael-adv-accordion-32775cf4 .eael-accordion-header");
   /* ===== How It Works locators ===== */
   private final By iconBoxTitles = By.cssSelector(".elementor-icon-box-title");
   private final By wpImage2230 = By.cssSelector(".wp-image-2230");
@@ -29,28 +40,9 @@ public class ApprenticeshipsPage extends Page {
       By.cssSelector(".elementor-element-3d21807c .elementor-image-box-wrapper");
   private final By imageBoxTitles = By.cssSelector(".elementor-image-box-title");
   private final By allFaqsButtonDiv = By.cssSelector(".elementor-element-c47f786");
-  //Apprenticeships cards/links
-  private static final By CARD_TITLE_LINKS = By.cssSelector(
-      "[data-elementor-type='loop-item'].type-apprenticeships h4.elementor-heading-title a"
-  );
-  /**
-   * FAQ accordions
-   **/
-  private static final By FAQ_SECTION = By.cssSelector("#faqs");
-  private static final By ACCORDION_HEADERS = By.cssSelector(
-      "#eael-adv-accordion-32775cf4 .eael-accordion-header");
 
   public ApprenticeshipsPage(WebDriver driver) {
     super(driver);
-  }
-
-  private static String slugify(String txt) {
-    String s = txt.toLowerCase(Locale.ROOT).trim();
-    s = s.replace("&", "and").replace("+", "plus");
-    s = s.replaceAll("[^a-z0-9\\s-]", "");
-    s = s.replaceAll("\\s+", "-");
-    s = s.replaceAll("-{2,}", "-");
-    return s;
   }
 
   public WebElement getWpImage2230() {
@@ -93,15 +85,20 @@ public class ApprenticeshipsPage extends Page {
       org.openqa.selenium.WebElement section = driver.findElement(FAQ_SECTION);
       ((org.openqa.selenium.JavascriptExecutor) driver)
           .executeScript("arguments[0].scrollIntoView({block:'center'});", section);
-    } catch (org.openqa.selenium.NoSuchElementException ignored) {}
+    } catch (org.openqa.selenium.NoSuchElementException ignored) {
+    }
 
     return driver.findElements(ACCORDION_HEADERS).stream()
-        .filter(h -> normalize(h.getText()).equals(normalize(question)))
+        .filter(h -> normalizer.normalize(h.getText())
+            .equals(normalizer.normalize(question)))
         .findFirst()
-        .orElseThrow(() -> new org.openqa.selenium.NoSuchElementException("FAQ header not found: " + question));
+        .orElseThrow(() -> new org.openqa.selenium.NoSuchElementException(
+            "FAQ header not found: " + question));
   }
+
   //Non-flaky replacement for faqContentContains()
-  public boolean faqContentContainsAfterAllottedTime(String question, String expected, java.time.Duration timeout) {
+  public boolean faqContentContainsAfterAllottedTime(String question, String expected,
+      java.time.Duration timeout) {
     WebElement header = findFaqHeaderByText(question);
     return accordionTextEventuallyContains(header, expected, timeout);
   }
@@ -115,11 +112,11 @@ public class ApprenticeshipsPage extends Page {
   }
 
   /* Locators for FAQs Button */
-  public WebElement getAllFaqsButton(){
+  public WebElement getAllFaqsButton() {
     return driver.findElement(allFaqsButtonDiv).findElement(By.cssSelector(".elementor-size-xs"));
   }
 
-  public void clickAllFaqsButton(){
+  public void clickAllFaqsButton() {
     safeClick(getAllFaqsButton());
     dismissCookieIfPresent();
   }
@@ -194,7 +191,7 @@ public class ApprenticeshipsPage extends Page {
     String url = driver.getCurrentUrl().toLowerCase(Locale.ROOT);
 
     boolean headingOk = h1.contains(expected) || h2.contains(expected);
-    boolean urlOk = url.contains("/" + slugify(expected) + "/");
+    boolean urlOk = url.contains("/" + normalizer.slugify(expected) + "/");
     return headingOk || urlOk;
   }
 
