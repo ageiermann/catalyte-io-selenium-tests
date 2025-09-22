@@ -7,7 +7,8 @@ import java.util.Locale;
  */
 public class StringNormalizer {
 
-  public StringNormalizer() {}
+  public StringNormalizer() {
+  }
 
   public String normalize(String s) {
     if (s == null) {

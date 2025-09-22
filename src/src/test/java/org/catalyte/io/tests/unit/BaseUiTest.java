@@ -6,9 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
-import org.catalyte.io.pages.Page;
-import org.catalyte.io.pages.PageFooter;
-import org.catalyte.io.utils.LocatorMapper;
 import org.catalyte.io.utils.LoggerUtil;
 import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.Dimension;
@@ -19,7 +16,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
@@ -111,8 +107,12 @@ public abstract class BaseUiTest {
 
   //Helpers to fix browser timeouts
   protected synchronized void restartDriver() {
-    try { if (driver != null) driver.quit(); }
-    catch (Exception ignored) {}
+    try {
+      if (driver != null) {
+        driver.quit();
+      }
+    } catch (Exception ignored) {
+    }
 
     this.driver = buildDriver();
   }
@@ -120,8 +120,8 @@ public abstract class BaseUiTest {
   private WebDriver buildDriver() {
     org.openqa.selenium.chrome.ChromeOptions opts = new org.openqa.selenium.chrome.ChromeOptions();
     opts.setPageLoadStrategy(org.openqa.selenium.PageLoadStrategy.EAGER);
-    opts.addArguments("--headless=new","--disable-gpu","--no-sandbox","--disable-dev-shm-usage",
-        "--disable-extensions","--disable-infobars","--blink-settings=imagesEnabled=false");
+    opts.addArguments("--headless=new", "--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage",
+        "--disable-extensions", "--disable-infobars", "--blink-settings=imagesEnabled=false");
     org.openqa.selenium.WebDriver d = new org.openqa.selenium.chrome.ChromeDriver(opts);
     d.manage().timeouts().pageLoadTimeout(java.time.Duration.ofSeconds(12));
     d.manage().timeouts().scriptTimeout(java.time.Duration.ofSeconds(10));
@@ -132,8 +132,10 @@ public abstract class BaseUiTest {
     try {
       driver.navigate().to(url);
     } catch (WebDriverException e) {
-      if (isDeadSession(e)) { restartDriver(); driver.navigate().to(url); }
-      else {
+      if (isDeadSession(e)) {
+        restartDriver();
+        driver.navigate().to(url);
+      } else {
         logger.severe("Driver crashed.");
         throw e;
       }

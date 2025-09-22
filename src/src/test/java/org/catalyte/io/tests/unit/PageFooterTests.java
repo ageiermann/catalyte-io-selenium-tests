@@ -136,8 +136,7 @@ public class PageFooterTests extends BaseUiTest {
         if (changed) {
           try {
             ((JavascriptExecutor) driver).executeScript("window.stop();");
-          }
-          catch (Exception ignored) {
+          } catch (Exception ignored) {
             logger.warning("URL " + href + "caused page timeout. Ignoring...");
             failures.add(String.format("[Footer][%s] %s → %s", heading, href, before));
           }
