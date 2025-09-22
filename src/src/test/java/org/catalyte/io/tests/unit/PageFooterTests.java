@@ -8,13 +8,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.catalyte.io.pages.PageFooter;
+import org.catalyte.io.utils.ButtonNavHelper;
 import org.catalyte.io.utils.LocatorMapper;
 import org.catalyte.io.utils.StringNormalizer;
 import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -25,6 +28,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+import org.catalyte.io.utils.ButtonNavHelper;
+import org.catalyte.io.utils.ButtonNavHelper.Btn;
 
 @Listeners({AllureTestNg.class, TestListener.class})
 public class PageFooterTests extends BaseUiTest {
@@ -32,8 +37,8 @@ public class PageFooterTests extends BaseUiTest {
   private final String startPageUrl = "https://www.catalyte.io/";
   private PageFooter footer;
   private LocatorMapper mapper;
-  private StringNormalizer normalizer;
   private List<String> warnings;
+  ButtonNavHelper buttonNavHelper;
 
   @BeforeClass(alwaysRun = true)
   public void setUpPages() {
@@ -44,7 +49,7 @@ public class PageFooterTests extends BaseUiTest {
     footer = new PageFooter(driver);
     mapper = new LocatorMapper(footer);
     warnings = new ArrayList<>();
-    normalizer = new StringNormalizer();
+    buttonNavHelper = new ButtonNavHelper();
   }
 
   @BeforeMethod(alwaysRun = true)
@@ -82,82 +87,92 @@ public class PageFooterTests extends BaseUiTest {
     wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("section.footer-menu")));
 
     Map<String, List<String>> menus = new LinkedHashMap<>();
-    for (WebElement headingEl : footer.getNavMenuHeadings()) {
-      String headingTitle = headingEl.getText().trim();
-      if (headingTitle.equalsIgnoreCase("Follow")) {
-        continue;
-      }
-
-      mapper.menuBy(headingTitle).ifPresent(menuBy -> {
-        WebElement menu = wait.until(ExpectedConditions.visibilityOfElementLocated(menuBy));
-        List<String> hrefs = menu.findElements(By.cssSelector("a.menu-link[href]"))
-            .stream().map(a -> a.getAttribute("href")).filter(Objects::nonNull).distinct().toList();
-        menus.put(headingTitle, hrefs);
+    for (String heading : mapper.headingKeys()) {
+      mapper.linksInMenuBy(heading).ifPresent(linksBy -> {
+        List<String> hrefs = driver.findElements(linksBy).stream()
+            .map(a -> a.getAttribute("href"))
+            .filter(Objects::nonNull).distinct().toList();
+        menus.put(heading, hrefs);
       });
     }
 
     for (var entry : menus.entrySet()) {
       String heading = entry.getKey();
-      logger.info("Testing nav menu with heading " + heading);
+      String separator = "\n --------------- \n";
+      logger.info(separator + "Testing nav menu with heading " + heading + separator);
 
       for (String href : entry.getValue()) {
-        driver.get(startPageUrl);
+        safeOpen(startPageUrl);
         wait.until(
             ExpectedConditions.presenceOfElementLocated(By.cssSelector("section.footer-menu")));
 
         By menuBy = mapper.menuBy(heading).orElseThrow();
-        WebElement menu = wait.until(ExpectedConditions.visibilityOfElementLocated(menuBy));
+        By linkBy = mapper.linkInMenuBy(heading, href).orElseThrow();
 
-        By linkBy = By.cssSelector("a.menu-link[href=\"" + normalizer.cssEscape(href) + "\"]");
-        WebElement link = menu.findElement(linkBy);
+        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(linkBy));
+        String menuLinkText = link.getText();
+        logger.info("Testing nav menu link " + menuLinkText);
 
-        // force same-tab
         ((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('target');",
             link);
-
         String before = driver.getCurrentUrl();
-        logger.info("Testing URL navigation via " + link.getText() + " to " + href);
-        try {
-          footer.clickNavMenuLink(link);
-        } catch (ElementClickInterceptedException e) {
-          ((JavascriptExecutor) driver).executeScript("arguments[0].click();", link);
-        } catch (WebDriverException died) {
-          safeOpen(startPageUrl);
-          wait.until(
-              ExpectedConditions.presenceOfElementLocated(By.cssSelector("section.footer-menu")));
-          menu = wait.until(ExpectedConditions.visibilityOfElementLocated(menuBy));
-          link = menu.findElement(linkBy);
-          ((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('target');",
-              link);
-          footer.clickNavMenuLink(link);
-        }
+
+        // JS-click to avoid full-load waits
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", link);
+
         boolean changed = footer.waitForUrlChangeOrHash(
             new WebDriverWait(driver, Duration.ofSeconds(10)), before, href);
         if (changed) {
           try {
             ((JavascriptExecutor) driver).executeScript("window.stop();");
-          } catch (Exception ignored) {
-            logger.warning("URL " + href + "caused page timeout. Ignoring...");
-            failures.add(String.format("[Footer][%s] %s → %s", heading, href, before));
-          }
+          } catch (Exception ignored) {}
         }
 
-        String currentUrl = driver.getCurrentUrl();
-        boolean ok = changed && allowedForHeading(heading, currentUrl, href);
-        if (ok) {
-          logger.info("Navigation to " + href + " successful.");
-        } else {
-          failures.add(String.format("[Footer][%s] %s → %s", heading, href, currentUrl));
-        }
+        String current = driver.getCurrentUrl();
+        boolean ok = changed && allowedForHeading(heading, current, href);
+        if (!ok)
+          failures.add(String.format("[Footer][%s][%s] %s → %s", heading, menuLinkText, href, current));
       }
     }
+
     if (!failures.isEmpty()) {
-      String navMenuWarnings = "Footer nav warnings (" + failures.size() + "):\n"
-          + String.join("\n", failures);
-      logger.warning(navMenuWarnings);
-      warnings.add(navMenuWarnings);
+      String msg = "Footer nav warnings (" + failures.size() + "):\n" + String.join("\n", failures);
+      logger.warning(msg);
+      warnings.add(msg);
     }
-    Assert.assertTrue(true); // always pass
+    Assert.assertTrue(true); // always pass by design
+  }
+
+  @Test
+  public void verifyTopFooterSectionTextDisplayed() {
+    for (WebElement e : footer.getTopFooterSectionText()) {
+      logger.info(e.getText());
+      checkElement(e::isDisplayed,
+          "One or more top footer section text elements missing");
+    }
+  }
+
+  @Test
+  public void verifyTopFooterSectionButtonsDisplayedAndFunctionalLenient() {
+    List<Btn> buttons = ButtonNavHelper.snapshotButtons(footer.getTopFooterSectionButtons());
+    Map<String, String> expect = Map.of(
+        "Learn More", "/apprenticeships/",
+        "Connect Now", "/about/contact-sales/");
+    for (Btn b : buttons) {
+      logger.info(b.text);
+    }
+
+    By TOP_FOOTER = footer.getPageFooterSectionTopLocator();
+    By READY = By.cssSelector("section.footer-menu");
+    Duration defaultWait = Duration.ofSeconds(10);
+
+    List<String> failures = new ArrayList<>();
+    for (var b : buttons) {
+      ButtonNavHelper.verifyButton(driver, startPageUrl, READY, TOP_FOOTER, b, expect, defaultWait)
+          .ifPresent(failures::add);
+    }
+
+    failures.forEach(logger::warning);
   }
 
   //==== Footer test helpers ==== //

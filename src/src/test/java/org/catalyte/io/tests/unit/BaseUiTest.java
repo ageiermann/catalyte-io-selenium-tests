@@ -5,6 +5,7 @@ import io.qameta.allure.testng.AllureTestNg;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import org.catalyte.io.utils.LoggerUtil;
 import org.catalyte.io.utils.TestListener;
@@ -70,6 +71,7 @@ public abstract class BaseUiTest {
 
     driver = new ChromeDriver(opts);
     wait = new WebDriverWait(driver, Duration.ofSeconds(defaultTimeoutSeconds()));
+    warnings = new ArrayList<>();
 
     driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(12));
     driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(10));
@@ -191,6 +193,28 @@ public abstract class BaseUiTest {
   }
 
   // ===== Utility methods =====
+  @FunctionalInterface
+  public interface Checkable {
+    boolean check();
+  }
+
+  public static class Check {
+    final Checkable condition;
+    final String warningMessage;
+
+    private Check(Checkable condition, String warningMessage) {
+      this.condition = condition;
+      this.warningMessage = warningMessage;
+    }
+
+    public static Check of(Checkable condition, String warningMessage) {
+      return new Check(condition, warningMessage);
+    }
+  }
+
+  /**
+   * Existing single-condition method (unchanged for backwards compatibility).
+   */
   protected void checkElement(Checkable condition, String warningMessage) {
     try {
       if (!condition.check()) {
@@ -198,14 +222,31 @@ public abstract class BaseUiTest {
         logger.warning(warningMessage);
       }
     } catch (Exception e) {
-      warnings.add(warningMessage + " (exception: " + e.getMessage() + ")");
-      logger.warning(warningMessage);
+      String msg = warningMessage + " (exception: " + e.getMessage() + ")";
+      warnings.add(msg);
+      logger.warning(msg);
     }
   }
 
-  @FunctionalInterface
-  public interface Checkable {
-
-    boolean check();
+  /**
+   * Multi-check version. Returns true if all pass, false if any fail.
+   */
+  protected boolean checkAll(Check... checks) {
+    boolean allPassed = true;
+    for (Check c : checks) {
+      try {
+        if (!c.condition.check()) {
+          allPassed = false;
+          warnings.add(c.warningMessage);
+          logger.warning(c.warningMessage);
+        }
+      } catch (Exception e) {
+        allPassed = false;
+        String msg = c.warningMessage + " (exception: " + e.getMessage() + ")";
+        warnings.add(msg);
+        logger.warning(msg);
+      }
+    }
+    return allPassed;
   }
 }
