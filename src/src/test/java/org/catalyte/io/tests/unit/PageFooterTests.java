@@ -8,17 +8,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import org.catalyte.io.pages.PageFooter;
 import org.catalyte.io.utils.ButtonNavHelper;
 import org.catalyte.io.utils.LocatorMapper;
-import org.catalyte.io.utils.StringNormalizer;
 import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -28,17 +23,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import org.catalyte.io.utils.ButtonNavHelper;
-import org.catalyte.io.utils.ButtonNavHelper.Btn;
 
 @Listeners({AllureTestNg.class, TestListener.class})
 public class PageFooterTests extends BaseUiTest {
 
   private final String startPageUrl = "https://www.catalyte.io/";
+  ButtonNavHelper buttonNavHelper;
   private PageFooter footer;
   private LocatorMapper mapper;
-  private List<String> warnings;
-  ButtonNavHelper buttonNavHelper;
 
   @BeforeClass(alwaysRun = true)
   public void setUpPages() {
@@ -48,7 +40,6 @@ public class PageFooterTests extends BaseUiTest {
     open(startPageUrl);
     footer = new PageFooter(driver);
     mapper = new LocatorMapper(footer);
-    warnings = new ArrayList<>();
     buttonNavHelper = new ButtonNavHelper();
   }
 
@@ -56,6 +47,11 @@ public class PageFooterTests extends BaseUiTest {
   @Override
   protected String startUrlForThisClass() {
     return startPageUrl;
+  }
+
+  @BeforeMethod(alwaysRun = true)
+  protected List<String> failures() {
+    return new ArrayList<>();
   }
 
   // === Methods For Footer Common To All Pages === //
@@ -81,7 +77,6 @@ public class PageFooterTests extends BaseUiTest {
   @Test
   public void verifyAllFooterNavMenuLinksDisplayedAndFunctionalLenient() {
     WebDriverWait wait = getWait();
-    List<String> failures = new ArrayList<>();
 
     safeOpen(startPageUrl);
     wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("section.footer-menu")));
@@ -125,20 +120,23 @@ public class PageFooterTests extends BaseUiTest {
         if (changed) {
           try {
             ((JavascriptExecutor) driver).executeScript("window.stop();");
-          } catch (Exception ignored) {}
+          } catch (Exception ignored) {
+          }
         }
 
         String current = driver.getCurrentUrl();
         boolean ok = changed && allowedForHeading(heading, current, href);
-        if (!ok)
-          failures.add(String.format("[Footer][%s][%s] %s → %s", heading, menuLinkText, href, current));
+        if (!ok) {
+          failures().add(
+              String.format("[Footer][%s][%s] %s → %s", heading, menuLinkText, href, current));
+        }
       }
     }
 
-    if (!failures.isEmpty()) {
-      String msg = "Footer nav warnings (" + failures.size() + "):\n" + String.join("\n", failures);
+    if (!failures().isEmpty()) {
+      String msg =
+          "Footer nav warnings (" + failures().size() + "):\n" + String.join("\n", failures());
       logger.warning(msg);
-      warnings.add(msg);
     }
     Assert.assertTrue(true); // always pass by design
   }
@@ -154,25 +152,27 @@ public class PageFooterTests extends BaseUiTest {
 
   @Test
   public void verifyTopFooterSectionButtonsDisplayedAndFunctionalLenient() {
-    List<Btn> buttons = ButtonNavHelper.snapshotButtons(footer.getTopFooterSectionButtons());
+    driver.get(startPageUrl);
+    getWait().until(
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("section.footer-menu")));
+
+    var buttons = ButtonNavHelper.snapshotButtons(
+        footer.getTopFooterSectionButtons()); // (text, href)
     Map<String, String> expect = Map.of(
-        "Learn More", "/apprenticeships/",
-        "Connect Now", "/about/contact-sales/");
-    for (Btn b : buttons) {
-      logger.info(b.text);
-    }
+        "Learn more", "/apprenticeships/",
+        "Connect now", "/about/contact-sales/"
+    );
 
     By TOP_FOOTER = footer.getPageFooterSectionTopLocator();
-    By READY = By.cssSelector("section.footer-menu");
+    By FOOTER_DID_LOAD = By.cssSelector("section.footer-menu");
     Duration defaultWait = Duration.ofSeconds(10);
 
-    List<String> failures = new ArrayList<>();
     for (var b : buttons) {
-      ButtonNavHelper.verifyButton(driver, startPageUrl, READY, TOP_FOOTER, b, expect, defaultWait)
-          .ifPresent(failures::add);
+      ButtonNavHelper.verifyButton(driver, startPageUrl, FOOTER_DID_LOAD, TOP_FOOTER, b, expect,
+              defaultWait)
+          .ifPresent(failures()::add);
     }
-
-    failures.forEach(logger::warning);
+    failures().forEach(logger::warning);
   }
 
   //==== Footer test helpers ==== //

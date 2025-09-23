@@ -53,7 +53,9 @@ public class StringNormalizer {
     return s;
   }
 
-  public String normalizeKey(String s){ return s==null?"":s.trim().toLowerCase(Locale.ROOT); }
+  public String normalizeKey(String s) {
+    return s == null ? "" : s.trim().toLowerCase(Locale.ROOT);
+  }
 
   public String cssEscape(String s) {
     return s.replace("\\", "\\\\")

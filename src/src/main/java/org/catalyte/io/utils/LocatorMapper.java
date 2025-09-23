@@ -36,9 +36,9 @@ public class LocatorMapper {
   public LocatorMapper(PageFooter footer) {
     Objects.requireNonNull(footer, "Footer must not be null");
     this.menus = Map.of(
-        "company",  footer.getPageFooterNavMenuAbout(),     // "Company" section
+        "company", footer.getPageFooterNavMenuAbout(),     // "Company" section
         "services", footer.getPageFooterNavMenuServices(),
-        "jobs",     footer.getPageFooterNavMenuJobs()
+        "jobs", footer.getPageFooterNavMenuJobs()
     );
     normalizer = new StringNormalizer();
   }
@@ -52,16 +52,23 @@ public class LocatorMapper {
     return Optional.ofNullable(menus.get(key));
   }
 
-  /** All links under a heading, as a locator (scoped to that menu). */
+  /**
+   * All links under a heading, as a locator (scoped to that menu).
+   */
   public Optional<By> linksInMenuBy(String headingText) {
-    return menuBy(headingText).map(menu -> new ByChained(menu, By.cssSelector("a.menu-link[href]")));
+    return menuBy(headingText).map(
+        menu -> new ByChained(menu, By.cssSelector("a.menu-link[href]")));
   }
 
-  /** A specific link (by exact href) under a heading, as a locator. */
+  /**
+   * A specific link (by exact href) under a heading, as a locator.
+   */
   public Optional<By> linkInMenuBy(String headingText, String href) {
     String css = "a.menu-link[href=\"" + normalizer.cssEscape(href) + "\"]";
     return menuBy(headingText).map(menu -> new ByChained(menu, By.cssSelector(css)));
   }
 
-  public Map<String, List<String>> getAllowedUrls() { return ALLOW; }
+  public Map<String, List<String>> getAllowedUrls() {
+    return ALLOW;
+  }
 }

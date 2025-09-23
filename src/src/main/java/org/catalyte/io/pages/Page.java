@@ -18,6 +18,7 @@ public class Page {
   protected final WebDriver driver;
   protected final WebDriverWait wait;
   protected final StringNormalizer normalizer;
+  Duration defaultWait = Duration.ofSeconds(10);
 
   public Page(WebDriver driver) {
     if (driver == null) {

@@ -9,14 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 import org.catalyte.io.utils.LoggerUtil;
 import org.catalyte.io.utils.TestListener;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
@@ -32,6 +35,7 @@ public abstract class BaseUiTest {
   protected WebDriver driver;
   protected WebDriverWait wait;
   protected List<String> warnings;
+  protected Duration defaultWait = Duration.ofSeconds(10);
   // Keep a handle to delete the temp profile afterward
   private Path userDataDir;
 
@@ -192,24 +196,108 @@ public abstract class BaseUiTest {
     }
   }
 
-  // ===== Utility methods =====
-  @FunctionalInterface
-  public interface Checkable {
-    boolean check();
+  // === By-based Checkable factories ===
+  protected Checkable present(By by) {
+    return () -> !driver.findElements(by).isEmpty();
   }
 
-  public static class Check {
-    final Checkable condition;
-    final String warningMessage;
+  protected Checkable displayed(By by) {
+    return () -> driver.findElements(by).stream().anyMatch(WebElement::isDisplayed);
+  }
 
-    private Check(Checkable condition, String warningMessage) {
-      this.condition = condition;
-      this.warningMessage = warningMessage;
-    }
+  protected Checkable allDisplayed(By by) {
+    return () -> {
+      var els = driver.findElements(by);
+      return !els.isEmpty() && els.stream().allMatch(WebElement::isDisplayed);
+    };
+  }
 
-    public static Check of(Checkable condition, String warningMessage) {
-      return new Check(condition, warningMessage);
+  protected Checkable countAtLeast(By by, int n) {
+    return () -> driver.findElements(by).size() >= n;
+  }
+
+  protected Checkable visibleWithin(By by, Duration timeout) {
+    return () -> {
+      new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOfElementLocated(by));
+      return true;
+    };
+  }
+
+  protected Checkable clickableWithin(By by, java.time.Duration timeout) {
+    return () -> {
+      new WebDriverWait(driver, timeout).until(ExpectedConditions.elementToBeClickable(by));
+      return true;
+    };
+  }
+
+  // === Convenience wrappers ===
+  protected void checkPresent(By by, String warningMessage) {
+    checkElement(present(by), warningMessage);
+  }
+
+  protected void checkDisplayed(By by, String warningMessage) {
+    checkElement(displayed(by), warningMessage);
+  }
+
+  protected void checkVisibleWithin(By by, Duration timeout, String warningMessage) {
+    checkElement(visibleWithin(by, timeout), warningMessage);
+  }
+
+  protected void checkClickableWithin(By by, Duration timeout, String warningMessage) {
+    checkElement(clickableWithin(by, timeout), warningMessage);
+  }
+
+  // === Ready-made Check objects for checkAll(...) ===
+  protected Check presentCheck(By by, String warningMessage) {
+    return Check.of(present(by), warningMessage);
+  }
+
+  protected Check displayedCheck(By by, String warningMessage) {
+    return Check.of(displayed(by), warningMessage);
+  }
+
+  protected Check allDisplayedCheck(By by, String warningMessage) {
+    return Check.of(allDisplayed(by), warningMessage);
+  }
+
+  protected Check countAtLeastCheck(By by, int n, String msg) {
+    return Check.of(countAtLeast(by, n), msg);
+  }
+
+  protected Check visibleWithinCheck(By by, Duration t, String msg) {
+    return Check.of(visibleWithin(by, t), msg);
+  }
+
+  protected Check clickableWithinCheck(By by, Duration t, String msg) {
+    return Check.of(clickableWithin(by, t), msg);
+  }
+
+  // Return true/false AND log/warn on failure
+  protected boolean assertOrWarn(Checkable c, String warningMessage) {
+    boolean ok;
+    try {
+      ok = c.check();
+    } catch (Exception e) {
+      ok = false;
     }
+    if (!ok) {
+      warnings.add(warningMessage);
+      logger.warning(warningMessage);
+    }
+    return ok;
+  }
+
+  // Combinators
+  protected Checkable and(Checkable a, Checkable b) {
+    return () -> a.check() && b.check();
+  }
+
+  protected Checkable or(Checkable a, Checkable b) {
+    return () -> a.check() || b.check();
+  }
+
+  protected Checkable not(Checkable a) {
+    return () -> !a.check();
   }
 
   /**
@@ -248,5 +336,27 @@ public abstract class BaseUiTest {
       }
     }
     return allPassed;
+  }
+
+  // ===== Utility methods =====
+  @FunctionalInterface
+  public interface Checkable {
+
+    boolean check();
+  }
+
+  public static class Check {
+
+    final Checkable condition;
+    final String warningMessage;
+
+    private Check(Checkable condition, String warningMessage) {
+      this.condition = condition;
+      this.warningMessage = warningMessage;
+    }
+
+    public static Check of(Checkable condition, String warningMessage) {
+      return new Check(condition, warningMessage);
+    }
   }
 }

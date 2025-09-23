@@ -1,31 +1,33 @@
 package org.catalyte.io.utils;
 
-import org.openqa.selenium.*;
+import java.net.URL;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.JavascriptException;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.support.pagefactory.ByChained;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URL;
-import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
-
+/**
+ * Helper class to safely click and navigate using Elementor buttons.
+ */
 public final class ButtonNavHelper {
 
+  private static final StringNormalizer normalizer = new StringNormalizer();
+
   public ButtonNavHelper() {
-  }
-
-  @FunctionalInterface
-  interface ThrowingSupplier<T> {
-
-    T get() throws Exception;
-  }
-
-  @FunctionalInterface
-  interface ThrowingRunnable {
-
-    void run() throws Exception;
   }
 
   private static <T> Optional<T> attempt(ThrowingSupplier<T> op) {
@@ -49,14 +51,13 @@ public final class ButtonNavHelper {
     return new WebDriverWait(d, t);
   }
 
-  private static final StringNormalizer normalizer = new StringNormalizer();
-
   /**
    * Always get a JS executor from the *real* driver, even if it’s wrapped (e.g., Serenity).
    */
   public static JavascriptExecutor js(WebDriver driver) {
-    if (driver instanceof JavascriptExecutor)
+    if (driver instanceof JavascriptExecutor) {
       return (JavascriptExecutor) driver;
+    }
     if (driver instanceof WrapsDriver wraps
         && wraps.getWrappedDriver() instanceof JavascriptExecutor) {
       return (JavascriptExecutor) wraps.getWrappedDriver();
@@ -64,25 +65,27 @@ public final class ButtonNavHelper {
     throw new IllegalStateException("Driver does not support JS: " + driver.getClass().getName());
   }
 
-  public static final class Btn {
-
-    public final String text, href;
-
-    public Btn(String text, String href) {
-      this.text = text;
-      this.href = href;
-    }
-
-    @Override
-    public String toString() {
-      return "Btn{text='" + text + "', href='" + href + "'}";
-    }
+  /**
+   * Snapshot a single button (text+href) from elements already found on the page.
+   */
+  public static List<Btn> snapshotButton(List<WebElement> elements) {
+    return elements.stream()
+        .map(el -> new Btn(safeText(el), el.getAttribute("href")))
+        .filter(b -> b.href != null && !b.href.isBlank())
+        .collect(Collectors.toMap(b -> b.href, b -> b, (a, b) -> a)) // de-dupe same href
+        .values().stream().collect(Collectors.toList());
   }
 
-  /* ================= Snapshot utilities ================= */
+  /**
+   * Snapshot a single button (text+href) using a locator on the current page.
+   */
+  public static List<Btn> snapshotButton(WebDriver driver, By buttonBy) {
+    return snapshotButton(driver.findElements(buttonBy));
+  }
 
   /**
-   * Snapshot buttons (text+href) from elements already found on the page (de-dupes by href).
+   * Snapshot multiple buttons (text+href) from elements already found on the page (de-dupes by
+   * href).
    */
   public static List<Btn> snapshotButtons(List<WebElement> elements) {
     return elements.stream()
@@ -92,8 +95,10 @@ public final class ButtonNavHelper {
         .values().stream().collect(Collectors.toList());
   }
 
+  /* ================= Snapshot utilities ================= */
+
   /**
-   * Snapshot buttons (text+href) using a locator on the current page.
+   * Snapshot multiple buttons (text+href) using a locator on the current page.
    */
   public static List<Btn> snapshotButtons(WebDriver driver, By buttonsBy) {
     return snapshotButtons(driver.findElements(buttonsBy));
@@ -102,11 +107,11 @@ public final class ButtonNavHelper {
   /**
    * Open startUrl and wait for a "ready" marker (returns false on failure).
    */
-  public static boolean openAndWait(WebDriver driver, String startUrl, By readyBy,
+  public static boolean openAndWait(WebDriver driver, String startUrl, By isPageLoaded,
       Duration timeout) {
     return attemptRun(() -> driver.navigate().to(startUrl))
         && attempt(() -> wait(driver, timeout).until(
-        ExpectedConditions.presenceOfElementLocated(readyBy))).isPresent();
+        ExpectedConditions.presenceOfElementLocated(isPageLoaded))).isPresent();
   }
 
   /**
@@ -173,27 +178,25 @@ public final class ButtonNavHelper {
    * (empty = success).
    */
   public static Optional<String> verifyButton(
-      WebDriver driver, String startUrl, By locator, By readyBy, Btn b,
-      Map<String, String> expectContains, Duration timeout) {
+      WebDriver driver, String startUrl, By isPageLoaded, By locator,
+      Btn b, Map<String, String> expectContains, Duration timeout) {
 
-    if (!openAndWait(driver, startUrl, readyBy, timeout))
+    if (!openAndWait(driver, startUrl, isPageLoaded, timeout)) {
       return Optional.of("Open/wait failed: %s (%s)".formatted(startUrl, b));
+    }
 
-    // robust candidates (absolute/relative/path variants), scoped to the top footer
-    var candidates = linkCandidatesByHref(b.href);
-    var linkOpt = findClickableInContainer(driver, locator, candidates, timeout);
-
-    if (linkOpt.isEmpty())
-      return Optional.of(
-          "Link not found in specified element: href=%s (btn='%s')".formatted(b.href, b.text));
+    List<By> candidates = linkCandidatesByHrefAndText(b.href, b.text);
 
     String before = driver.getCurrentUrl();
-    if (!clickSameTab(driver, linkOpt.get()))
+    boolean clicked = clickCandidateSameTabWithRetry(driver, locator, candidates, timeout, 3);
+    if (!clicked) {
       return Optional.of("Click failed: href=%s (btn='%s')".formatted(b.href, b.text));
+    }
 
     boolean changed = waitForUrlChangeOrHash(driver, timeout, before, b.href);
-    if (changed)
+    if (changed) {
       attemptRun(() -> js(driver).executeScript("window.stop();"));
+    }
 
     String finalUrl = driver.getCurrentUrl();
     boolean ok = changed && validateDestination(b.text, b.href, finalUrl, expectContains);
@@ -202,26 +205,31 @@ public final class ButtonNavHelper {
   }
 
   /**
-   * Verify a single button *scoped to a menu container* (safer when there are duplicates).
-   * Returns Optional failure message (empty = success).
+   * Verify a single button *scoped to a menu container* (safer when there are duplicates). Returns
+   * Optional failure message (empty = success).
    */
   public static Optional<String> verifyButtonInMenu(
-      WebDriver driver, String startUrl, By readyBy, By menuBy, Btn b,
-      Map<String,String> expectContains, Duration timeout) {
+      WebDriver driver, String startUrl, By isPageLoaded, By menuBy, Btn b,
+      Map<String, String> expectContains, Duration timeout) {
 
-    if (!openAndWait(driver, startUrl, readyBy, timeout))
+    if (!openAndWait(driver, startUrl, isPageLoaded, timeout)) {
       return Optional.of(String.format("Open/wait failed: %s (%s)", startUrl, b));
+    }
 
     Optional<WebElement> linkOpt = findClickable(driver, linkInMenuByHref(menuBy, b.href), timeout);
-    if (linkOpt.isEmpty())
+    if (linkOpt.isEmpty()) {
       return Optional.of(String.format("Menu link not found: href=%s (btn='%s')", b.href, b.text));
+    }
 
     String before = driver.getCurrentUrl();
-    if (clickSameTab(driver, linkOpt.get()))
+    if (clickSameTab(driver, linkOpt.get())) {
       return Optional.of(String.format("Click failed (menu): href=%s (btn='%s')", b.href, b.text));
+    }
 
     boolean changed = waitForUrlChangeOrHash(driver, timeout, before, b.href);
-    if (changed) attemptRun(() -> ((JavascriptExecutor) driver).executeScript("window.stop();"));
+    if (changed) {
+      attemptRun(() -> ((JavascriptExecutor) driver).executeScript("window.stop();"));
+    }
 
     String finalUrl = driver.getCurrentUrl();
     boolean ok = changed && validateDestination(b.text, b.href, finalUrl, expectContains);
@@ -229,30 +237,43 @@ public final class ButtonNavHelper {
         : Optional.of(String.format("Button '%s' href=%s → final=%s", b.text, b.href, finalUrl));
   }
 
-  /** Verify many buttons (page-wide); returns all failure messages (empty = all OK). */
+  /**
+   * Verify many buttons (page-wide); returns all failure messages (empty = all OK).
+   */
   public static List<String> verifyButtons(
       WebDriver driver, String startUrl, By locator, By readyBy,
-      List<Btn> buttons, Map<String,String> expectContains, Duration timeout) {
+      List<Btn> buttons, Map<String, String> expectContains, Duration timeout) {
     List<String> failures = new ArrayList<>();
     for (Btn b : buttons) {
-      verifyButton(driver, startUrl, readyBy, locator, b, expectContains, timeout).ifPresent(failures::add);
+      verifyButton(driver, startUrl, readyBy, locator, b, expectContains, timeout).ifPresent(
+          failures::add);
     }
     return failures;
   }
 
-  /** Verify many buttons under a specific menu container (safer when duplicates exist). */
+  /**
+   * Verify many buttons under a specific menu container (safer when duplicates exist).
+   */
   public static List<String> verifyButtonsInMenu(
       WebDriver driver, String startUrl, By readyBy, By menuBy,
-      List<Btn> buttons, Map<String,String> expectContains, Duration timeout) {
+      List<Btn> buttons, Map<String, String> expectContains, Duration timeout) {
     List<String> failures = new ArrayList<>();
     for (Btn b : buttons) {
-      verifyButtonInMenu(driver, startUrl, readyBy, menuBy, b, expectContains, timeout).ifPresent(failures::add);
+      verifyButtonInMenu(driver, startUrl, readyBy, menuBy, b, expectContains, timeout).ifPresent(
+          failures::add);
     }
     return failures;
   }
 
   /* ================= Helpers ================= */
-  private static String safeText(WebElement el){ try { return el.getText().trim(); } catch (Exception e) { return ""; } }
+  private static String safeText(WebElement el) {
+    try {
+      return el.getText().trim();
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
   private static boolean urlsMatchLenient(String expected, String actual) {
     try {
       URL e = new URL(expected), a = new URL(actual);
@@ -263,19 +284,25 @@ public final class ButtonNavHelper {
       return actual.startsWith(expected) || actual.startsWith(expected + "/");
     }
   }
+
   private static String pathOf(String href) {
     try {
       java.net.URI u = java.net.URI.create(href);
       String p = Optional.ofNullable(u.getPath()).orElse("/");
-      // keep fragment if present (for #about-press)
       return u.getFragment() == null ? p : p + "#" + u.getRawFragment();
-    } catch (Exception e) { return href; }
+    } catch (Exception e) {
+      return href;
+    }
   }
 
-  /** Build robust link candidates for a given href (absolute/relative/path, with/without trailing slash). */
+  /**
+   * Build robust link candidates for a given href (absolute/relative/path, with/without trailing
+   * slash).
+   */
   public static List<By> linkCandidatesByHref(String href) {
     String path = pathOf(href);
-    String pathNoSlash = path.endsWith("/") && path.length() > 1 ? path.substring(0, path.length() - 1) : path;
+    String pathNoSlash =
+        path.endsWith("/") && path.length() > 1 ? path.substring(0, path.length() - 1) : path;
     String pathWithSlash = path.endsWith("/") ? path : path + "/";
 
     return List.of(
@@ -292,28 +319,141 @@ public final class ButtonNavHelper {
     );
   }
 
-  /** Try multiple locators; return the first clickable element found. */
-  public static Optional<WebElement> findClickable(WebDriver driver, List<By> candidates, Duration timeout) {
+  public static List<By> linkCandidatesByHrefAndText(String href, String buttonText) {
+    String path = pathOf(href);
+    String noSlash =
+        path.endsWith("/") && path.length() > 1 ? path.substring(0, path.length() - 1) : path;
+    String withSlash = path.endsWith("/") ? path : path + "/";
+    String txt = Optional.ofNullable(buttonText).orElse("").trim().toLowerCase();
+
+    List<By> list = new ArrayList<>(List.of(
+        // exact absolute + relative variants
+        By.cssSelector("a[href=\"" + normalizer.cssEscape(href) + "\"]"),
+        By.cssSelector("a[href=\"" + normalizer.cssEscape(path) + "\"]"),
+        By.cssSelector("a[href=\"" + normalizer.cssEscape(noSlash) + "\"]"),
+        By.cssSelector("a[href=\"" + normalizer.cssEscape(withSlash) + "\"]"),
+        // ends-with path (tolerate query/utm)
+        By.cssSelector("a[href$=\"" + normalizer.cssEscape(path) + "\"]"),
+        By.cssSelector("a[href$=\"" + normalizer.cssEscape(noSlash) + "\"]"),
+        By.cssSelector("a[href$=\"" + normalizer.cssEscape(withSlash) + "\"]")
+    ));
+    if (!txt.isEmpty()) {
+      // text fallback (case-insensitive), restricted to elementor buttons
+      list.add(By.xpath(".//a[contains(@class,'elementor-button') and " +
+          "translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')="
+          +
+          "'" + txt.replace("'", "''") + "']"));
+    }
+    return list;
+  }
+
+  /**
+   * Try multiple locators; return the first clickable element found.
+   */
+  public static Optional<WebElement> findClickable(WebDriver driver, List<By> candidates,
+      Duration timeout) {
     for (By by : candidates) {
       Optional<WebElement> el = attempt(() -> wait(driver, timeout)
           .ignoring(NoSuchElementException.class)
           .ignoring(StaleElementReferenceException.class)
           .until(ExpectedConditions.elementToBeClickable(by)));
-      if (el.isPresent()) return el;
+      if (el.isPresent()) {
+        return el;
+      }
     }
     return Optional.empty();
   }
 
-  /** Same as above, but scoped to a container (e.g., top-footer section) via ByChained. */
-  public static Optional<WebElement> findClickableInContainer(WebDriver driver, By container, List<By> candidates, Duration timeout) {
+  /**
+   * Same as above, but scoped to a container (e.g., top-footer section) via ByChained.
+   */
+  public static Optional<WebElement> findClickableInContainerOld(WebDriver driver, By container,
+      List<By> candidates, Duration timeout) {
     for (By by : candidates) {
       By scoped = new ByChained(container, by);
       Optional<WebElement> el = attempt(() -> wait(driver, timeout)
-          .ignoring(org.openqa.selenium.NoSuchElementException.class)
-          .ignoring(org.openqa.selenium.StaleElementReferenceException.class)
+          .ignoring(NoSuchElementException.class)
+          .ignoring(StaleElementReferenceException.class)
           .until(ExpectedConditions.elementToBeClickable(scoped)));
-      if (el.isPresent()) return el;
+      if (el.isPresent()) {
+        return el;
+      }
     }
     return Optional.empty();
+  }
+
+  public static Optional<WebElement> findClickableInContainer(
+      WebDriver driver, By container, By candidate, Duration timeout) {
+    By scoped = new ByChained(container, candidate);
+    return attempt(() -> wait(driver, timeout)
+        .ignoring(NoSuchElementException.class)
+        .ignoring(StaleElementReferenceException.class)
+        .until(ExpectedConditions.elementToBeClickable(scoped)));
+  }
+
+  private static void scrollCenter(WebDriver driver, WebElement el) {
+    try {
+      js(driver).executeScript("arguments[0].scrollIntoView({block:'center',inline:'center'})", el);
+    } catch (Exception ignored) {
+    }
+  }
+
+  public static boolean clickCandidateSameTabWithRetry(
+      WebDriver driver, By container, List<By> candidates, Duration timeout, int attempts) {
+
+    for (int i = 0; i < attempts; i++) {
+      for (By by : candidates) {
+        var elOpt = findClickableInContainer(driver, container, by, timeout);
+        if (elOpt.isEmpty()) {
+          continue;
+        }
+        WebElement el = elOpt.get();
+        try {
+          scrollCenter(driver, el);
+          JavascriptExecutor exec = js(driver);
+          exec.executeScript("arguments[0].removeAttribute('target');", el);
+          try {
+            el.click(); // try native first
+          } catch (ElementClickInterceptedException ignored) {
+            exec.executeScript("arguments[0].click();", el); // fallback JS click
+          }
+          return true;
+        } catch (StaleElementReferenceException | JavascriptException e) {
+          // re-loop to re-resolve & retry
+        }
+      }
+      try {
+        Thread.sleep(120);
+      } catch (InterruptedException ignored) {
+      }
+    }
+    return false;
+  }
+
+  @FunctionalInterface
+  interface ThrowingSupplier<T> {
+
+    T get() throws Exception;
+  }
+
+  @FunctionalInterface
+  interface ThrowingRunnable {
+
+    void run() throws Exception;
+  }
+
+  public static final class Btn {
+
+    public final String text, href;
+
+    public Btn(String text, String href) {
+      this.text = text;
+      this.href = href;
+    }
+
+    @Override
+    public String toString() {
+      return "Btn{text='" + text + "', href='" + href + "'}";
+    }
   }
 }

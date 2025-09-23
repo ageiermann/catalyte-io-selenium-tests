@@ -1,40 +1,53 @@
 package org.catalyte.io.pages;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.pagefactory.ByChained;
 
 public class HirePage extends Page {
 
-  // Locators
-
-  /* FAQ Accordions */
+  // ===== Containers / top-level locators =====
+  private static final By PAGE_DID_LOAD = By.cssSelector(".elementor-element-556fd4da");
   private static final By HIRE_FAQ_ACCORDION_ROOT = By.cssSelector("#eael-adv-accordion-493eab1");
   private static final By HIRE_FAQ_HEADERS = By.cssSelector(
       "#eael-adv-accordion-493eab1 .eael-accordion-header");
   private static final By HIRE_FAQ_HEADER_TEXT_SPAN = By.cssSelector(".eael-accordion-tab-title");
   private static final By HIRE_FAQ_SECTION_HEADING = By.xpath(
       "//h3[normalize-space()='Hire Catalyte talent FAQs']");
+  private static final By BUTTON_TEXT_ANCHOR = By.cssSelector(".elementor-button-text");
+  private static final By BUTTON_ANCHOR = By.cssSelector("a.elementor-button");
+  private static final By ALL_FAQS_SECTION = By.cssSelector(".elementor-element-594296b");
+  private static final By ALL_FAQS_BUTTON_INNER = By.cssSelector(".elementor-size-xs");
+  private static final By ABOUT_AI_SECTION = By.cssSelector(".elementor-element-0e3088f");
   private final By textEditors = By.cssSelector(".elementor-widget-text-editor p");
   private final By imageBoxContents = By.cssSelector(".elementor-image-box-content");
-  private final By imageBoxText = By.cssSelector(".elementor-image-box-description");
+  private final By imageBoxText = By.cssSelector(
+      ".elementor-image-box-description"); // (kept for completeness)
   private final By image3111 = By.cssSelector(".wp-image-3111");
   private final By image3112 = By.cssSelector(".wp-image-3112");
   private final By image3113 = By.cssSelector(".wp-image-3113");
   private final By menuText = By.cssSelector(".menu-text");
-  private final By workWithUsButton = By.cssSelector(".elementor-size-sm .elementor-button-text");
+  // Buttons / videos
+  private final By workWithUsButtonScope = By.cssSelector(
+      ".elementor-size-sm");           // container for button text
   private final By prVideo = By.cssSelector(".elementor-element-f58a359");
   private final By testimonialsVideo = By.cssSelector(".elementor-element-38681986");
-  private final By aboutAIButton = By.cssSelector(".elementor-button-link .elementor-size-xs");
+  private final By aboutAIButtonDiv = By.cssSelector(".elementor-element-e3f8064");
   private final By allFaqsButtonDiv = By.cssSelector(".elementor-element-457cc16");
 
   public HirePage(WebDriver driver) {
     super(driver);
   }
 
-  // Actions / getters (use Page helpers to avoid NPEs)
+  public By pageLoadedIfDisplayed() {
+    return PAGE_DID_LOAD;
+  }
+
+  // ===== Simple lists =====
   public List<WebElement> getTextEditors() {
     return driver.findElements(textEditors);
   }
@@ -43,83 +56,119 @@ public class HirePage extends Page {
     return driver.findElements(imageBoxContents);
   }
 
-  public boolean isImage3111Displayed() {
-    return find(image3111).isDisplayed();
-  }
-
-  public boolean isImage3112Displayed() {
-    return find(image3112).isDisplayed();
-  }
-
-  public boolean isImage3113Displayed() {
-    return find(image3113).isDisplayed();
-  }
-
   public List<WebElement> getMenuTextItems() {
     return driver.findElements(menuText);
   }
 
+  // ===== Images =====
+  public WebElement getImage3111() {
+    return driver.findElement(image3111);
+  }
+
+  public WebElement getImage3112() {
+    return driver.findElement(image3112);
+  }
+
+  public WebElement getImage3113() {
+    return driver.findElement(image3113);
+  }
+
+  // ===== Buttons / videos (driver-scoped, not element.findElement(...)) =====
+
+  /**
+   * Button inside a known “small size” scope; uses ByChained to scope and reach the text anchor.
+   */
   public WebElement getWorkWithUsButton() {
-    return find(workWithUsButton);
+    return driver.findElement(new ByChained(workWithUsButtonScope, BUTTON_TEXT_ANCHOR));
+  }
+
+  public By getWorkWithUsButtonBy() {
+    return new ByChained(workWithUsButtonScope, BUTTON_TEXT_ANCHOR);
+  }
+
+  public By getWorkWithUsButtonScope() {
+    return workWithUsButtonScope;
+  }
+
+  public By getAllFaqsSectionBy() {
+    return ALL_FAQS_SECTION;
   }
 
   public WebElement getAboutAIButton() {
-    return find(aboutAIButton);
+    return driver.findElement(new ByChained(aboutAIButtonDiv, BUTTON_ANCHOR));
+  }
+
+  public By getAboutAiSectionBy() {
+    return ABOUT_AI_SECTION;
+  }
+
+  public WebElement getAboutAISection() {
+    return driver.findElement(ABOUT_AI_SECTION);
+  }
+
+  public By getAboutAIButtonBy() {
+    return new ByChained(aboutAIButtonDiv, BUTTON_ANCHOR);
+  }
+
+  public By getAboutAIButtonDivBy() {
+    return aboutAIButtonDiv;
   }
 
   public WebElement getPRVideo() {
-    return find(prVideo);
+    return driver.findElement(prVideo);
   }
 
   public WebElement getTestimonialsVideo() {
-    return find(testimonialsVideo);
+    return driver.findElement(testimonialsVideo);
   }
 
-  //fixing flaky clicks
-  public void clickWorkWithUsButton() {
-    dismissCookieIfPresent();
-    safeClick(workWithUsButton);
-  }
-
-  /* === FAQ Accordion Helpers === */
+  // ===== FAQ helpers =====
 
   /**
-   * Find the FAQ header by its visible question text (case/space-insensitive).
+   * Find the FAQ header by visible text (case/space-insensitive). Uses driver-scoped search +
+   * ByChained for header text span (no element-context relative locators).
    */
   private WebElement findFaqHeaderByText(String question) {
+    // bring section heading into view if present (optional QoL)
     try {
-      WebElement heading = find(HIRE_FAQ_SECTION_HEADING);
+      WebElement heading = driver.findElement(HIRE_FAQ_SECTION_HEADING);
       scrollToCenter(heading);
     } catch (Exception ignored) {
     }
 
-    WebElement root = driver.findElement(HIRE_FAQ_ACCORDION_ROOT);
-    var headers = root.findElements(HIRE_FAQ_HEADERS);
-
     String want = normalizer.normalize(question);
+
+    // Get all headers under the accordion root via ByChained
+    List<WebElement> headers = driver.findElements(
+        new ByChained(HIRE_FAQ_ACCORDION_ROOT, HIRE_FAQ_HEADERS));
+
     return headers.stream()
         .filter(h -> {
-          String txt = h.findElement(HIRE_FAQ_HEADER_TEXT_SPAN).getText();
-          return normalizer.normalize(txt).equals(want);
+          // scope to the title span inside each header
+          WebElement titleSpan = h.findElement(HIRE_FAQ_HEADER_TEXT_SPAN);
+          String txt = normalizer.normalize(titleSpan.getText());
+          return txt.equals(want);
         })
         .findFirst()
         .orElseThrow(() -> new NoSuchElementException("FAQ header not found: " + question));
   }
 
-  //Non-flaky replacement for faqContentContains()
+  /**
+   * Wait until the accordion content under a given header eventually contains expected text.
+   * Delegates to Page helper: accordionTextEventuallyContains(WebElement, String, Duration)
+   */
   public boolean faqContentContainsAfterAllottedTime(String question, String expected,
-      java.time.Duration timeout) {
+      Duration timeout) {
     WebElement header = findFaqHeaderByText(question);
     return accordionTextEventuallyContains(header, expected, timeout);
   }
 
-  /* Locators for FAQs Button */
+  // ===== All FAQs button (scoped with ByChained) =====
   public WebElement getAllFaqsButton() {
-    return find(allFaqsButtonDiv).findElement(By.cssSelector(".elementor-size-xs"));
+    return driver.findElement(new ByChained(allFaqsButtonDiv, ALL_FAQS_BUTTON_INNER));
   }
 
-  public void clickAllFaqsButton() {
-    safeClick(getAllFaqsButton());
-    dismissCookieIfPresent();
+  public By getAllFaqsButtonBy() {
+    return new ByChained(allFaqsButtonDiv, ALL_FAQS_BUTTON_INNER);
   }
 }

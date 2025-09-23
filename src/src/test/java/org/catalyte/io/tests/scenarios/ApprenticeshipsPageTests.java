@@ -2,12 +2,15 @@ package org.catalyte.io.tests.scenarios;
 
 import io.qameta.allure.testng.AllureTestNg;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.catalyte.io.pages.ApprenticeshipsPage;
 import org.catalyte.io.tests.unit.BaseUiTest;
+import org.catalyte.io.utils.ButtonNavHelper;
 import org.catalyte.io.utils.TestListener;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -20,7 +23,6 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
 
   private final String apprenticeshipsPageUrl = "https://www.catalyte.io/apprenticeships/";
   private ApprenticeshipsPage page;
-  private List<String> warnings;
 
   @BeforeClass(alwaysRun = true)
   public void setUpPages() {
@@ -36,6 +38,11 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
   @Override
   protected String startUrlForThisClass() {
     return apprenticeshipsPageUrl;
+  }
+
+  @BeforeMethod(alwaysRun = true)
+  protected List<String> failures() {
+    return new ArrayList<>();
   }
 
   @Test
@@ -138,13 +145,19 @@ public class ApprenticeshipsPageTests extends BaseUiTest {
 
   @Test
   public void testAllFaqsButtonDisplayedAndFunctionsLenient() {
-    checkElement(() -> page.getAllFaqsButton().isDisplayed(), "'All FAQS' button missing");
-    page.clickAllFaqsButton();
-    getWait().until(ExpectedConditions.urlContains("/about/"));
-    String currentUrl = driver.getCurrentUrl().toLowerCase();
-    org.testng.Assert.assertTrue(
-        currentUrl.contains("/about/faqs"),
-        "Button did not navigate to expected page. Current URL: " + currentUrl
-    );
+    var buttons = ButtonNavHelper.snapshotButton(driver,
+        page.getAllFaqsButtonBy());
+    Map<String, String> expect = Map.of("All FAQs", "/about/faqs/");
+
+    By ALL_FAQS_SECTION = page.getFaqSectionBy();
+    By PAGE_DID_LOAD = page.pageLoadedIfDisplayed();
+
+    for (var b : buttons) {
+      ButtonNavHelper.verifyButton(driver, apprenticeshipsPageUrl, PAGE_DID_LOAD, ALL_FAQS_SECTION,
+              b, expect,
+              defaultWait)
+          .ifPresent(failures()::add);
+    }
+    failures().forEach(logger::warning);
   }
 }

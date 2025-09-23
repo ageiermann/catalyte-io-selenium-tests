@@ -4,10 +4,12 @@ import io.qameta.allure.testng.AllureTestNg;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.catalyte.io.pages.HirePage;
 import org.catalyte.io.tests.unit.BaseUiTest;
+import org.catalyte.io.utils.ButtonNavHelper;
 import org.catalyte.io.utils.TestListener;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -18,17 +20,16 @@ import org.testng.annotations.Test;
 public class HireApprenticeSectionTests extends BaseUiTest {
 
   private final String hirePageUrl = "https://www.catalyte.io/hire-talent/hire-apprentices/";
-  private HirePage hire;
-  private List<String> warnings;
+  private HirePage page;
 
   @BeforeClass(alwaysRun = true)
-  public void setUpPages() {   // <-- different name; not overriding anything
+  public void setUpPages() {
     // BaseUiTest.setUpBase() runs first and creates 'driver'
     if (driver == null) {
       throw new IllegalStateException("Driver is null in setUpPages()");
     }
     open(hirePageUrl);
-    hire = new HirePage(driver);
+    page = new HirePage(driver);
   }
 
   @BeforeMethod
@@ -42,35 +43,48 @@ public class HireApprenticeSectionTests extends BaseUiTest {
     return hirePageUrl;
   }
 
+  @BeforeMethod(alwaysRun = true)
+  protected List<String> failures() {
+    return new ArrayList<>();
+  }
+
   @Test
   public void testImagesExistLenient() {
-    checkElement(hire::isImage3111Displayed, "Image 3111 missing");
-    checkElement(hire::isImage3112Displayed, "Image 3112 missing");
-    checkElement(hire::isImage3113Displayed, "Image 3113 missing");
+    checkAll(
+        Check.of(page.getImage3111()::isDisplayed, "Image 3111 missing"),
+        Check.of(page.getImage3112()::isDisplayed, "Image 3112 missing"),
+        Check.of(page.getImage3113()::isDisplayed, "Image 3113 missing"));
   }
 
   @Test
   public void testVideosExistLenient() throws InterruptedException {
-    checkElement(() -> hire.getPRVideo().isDisplayed(), "Apprenticeships PR video iframe missing");
-    checkElement(() -> hire.getTestimonialsVideo().isDisplayed(),
-        "Apprenticeships testimonials video iframe missing");
+    checkAll(
+        Check.of(page.getPRVideo()::isDisplayed, "Apprenticeships PR video iframe missing"),
+        Check.of(page.getTestimonialsVideo()::isDisplayed,
+            "Apprenticeships testimonials video iframe missing"));
   }
 
   @Test
   public void testWorkWithUsButtonDisplayedAndFunctionsLenient() {
-    checkElement(() -> hire.getWorkWithUsButton().isDisplayed(), "Main workflow button missing");
-    hire.clickWorkWithUsButton();
-    getWait().until(ExpectedConditions.urlContains("/about/"));
-    String currentUrl = driver.getCurrentUrl().toLowerCase();
-    org.testng.Assert.assertTrue(
-        currentUrl.contains("/about/contact-sales"),
-        "Button did not navigate to expected page. Current URL: " + currentUrl
-    );
+    var buttons = ButtonNavHelper.snapshotButton(driver,
+        page.getWorkWithUsButtonBy());
+    Map<String, String> expect = Map.of("Connect now", "/about/contact-sales/");
+
+    By WORK_WITH_US_SECTION = page.getWorkWithUsButtonScope();
+    By PAGE_DID_LOAD = page.pageLoadedIfDisplayed();
+
+    for (var b : buttons) {
+      ButtonNavHelper.verifyButton(driver, hirePageUrl, PAGE_DID_LOAD, WORK_WITH_US_SECTION, b,
+              expect,
+              defaultWait)
+          .ifPresent(failures()::add);
+    }
+    failures().forEach(logger::warning);
   }
 
   @Test
   public void testMenuTextItemsLenient() {
-    if (hire.getMenuTextItems().isEmpty()) {
+    if (page.getMenuTextItems().isEmpty()) {
       warnings.add("Menu text items missing");
       logger.warning("Menu text items missing");
     }
@@ -80,27 +94,27 @@ public class HireApprenticeSectionTests extends BaseUiTest {
   public void faqAccordion_ExistsAndDisplaysExpectedText() {
     String howCanIHire = "How can I hire Catalyte talent?";
     Assert.assertTrue(
-        hire.faqContentContainsAfterAllottedTime(howCanIHire, "We work closely",
+        page.faqContentContainsAfterAllottedTime(howCanIHire, "We work closely",
             Duration.ofSeconds(5)),
         "FAQ content did not contain expected phrase for: " + howCanIHire
     );
 
     String findTalent = "How do you deliver high-quality talent?";
     Assert.assertTrue(
-        hire.faqContentContainsAfterAllottedTime(findTalent, "three steps", Duration.ofSeconds(5)),
+        page.faqContentContainsAfterAllottedTime(findTalent, "three steps", Duration.ofSeconds(5)),
         "FAQ content did not contain expected phrase for: " + findTalent
     );
 
     String whatIndustries = "What industries do you provide talent for?";
     Assert.assertTrue(
-        hire.faqContentContainsAfterAllottedTime(whatIndustries, "clients in many industries",
+        page.faqContentContainsAfterAllottedTime(whatIndustries, "clients in many industries",
             Duration.ofSeconds(5)),
         "Requirements FAQ missing expected phrase for: " + whatIndustries
     );
 
     String ifNeedMore = "What if I need more than apprentice talent?";
     Assert.assertTrue(
-        hire.faqContentContainsAfterAllottedTime(ifNeedMore, "across all experience levels",
+        page.faqContentContainsAfterAllottedTime(ifNeedMore, "across all experience levels",
             Duration.ofSeconds(5)),
         "FAQ content did not contain expected phrase for: " + ifNeedMore
     );
@@ -108,13 +122,35 @@ public class HireApprenticeSectionTests extends BaseUiTest {
 
   @Test
   public void testAllFaqsButtonDisplayedAndFunctionsLenient() {
-    checkElement(() -> hire.getAllFaqsButton().isDisplayed(), "'All FAQS' button missing");
-    hire.clickAllFaqsButton();
-    getWait().until(ExpectedConditions.urlContains("/about/"));
-    String currentUrl = driver.getCurrentUrl().toLowerCase();
-    org.testng.Assert.assertTrue(
-        currentUrl.contains("/about/faqs"),
-        "Button did not navigate to expected page. Current URL: " + currentUrl
-    );
+    var buttons = ButtonNavHelper.snapshotButton(driver,
+        page.getAllFaqsButtonBy());
+    Map<String, String> expect = Map.of("All FAQs", "/about/faqs/");
+
+    By ALL_FAQS_SECTION = page.getAllFaqsSectionBy();
+    By PAGE_DID_LOAD = page.pageLoadedIfDisplayed();
+
+    for (var b : buttons) {
+      ButtonNavHelper.verifyButton(driver, hirePageUrl, PAGE_DID_LOAD, ALL_FAQS_SECTION, b, expect,
+              defaultWait)
+          .ifPresent(failures()::add);
+    }
+    failures().forEach(logger::warning);
+  }
+
+  @Test
+  public void testAboutAIButtonDisplayedAndFunctionsLenient() {
+    var buttons = ButtonNavHelper.snapshotButton(driver,
+        page.getAboutAIButtonBy());
+    Map<String, String> expect = Map.of("About our AI", "/about/catalyte-ai/");
+
+    By ABOUT_AI_SECTION = page.getAboutAiSectionBy();
+    By PAGE_DID_LOAD = page.pageLoadedIfDisplayed();
+
+    for (var b : buttons) {
+      ButtonNavHelper.verifyButton(driver, hirePageUrl, PAGE_DID_LOAD, ABOUT_AI_SECTION, b, expect,
+              defaultWait)
+          .ifPresent(failures()::add);
+    }
+    failures().forEach(logger::warning);
   }
 }
