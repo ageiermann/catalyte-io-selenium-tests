@@ -1,5 +1,6 @@
 package org.catalyte.io.tests.unit;
 
+import static org.catalyte.io.utils.ButtonNavHelper.js;
 import io.qameta.allure.Attachment;
 import io.qameta.allure.testng.AllureTestNg;
 import java.nio.file.Files;
@@ -11,6 +12,7 @@ import org.catalyte.io.utils.LoggerUtil;
 import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.TakesScreenshot;
@@ -195,6 +197,11 @@ public abstract class BaseUiTest {
       }
     }
   }
+
+  //JavaScriptExecutor helper
+  public JavascriptExecutor jsHelper() { return js(driver); }
+
+  //=============== Checkable subclass =========================//
 
   // === By-based Checkable factories ===
   protected Checkable present(By by) {

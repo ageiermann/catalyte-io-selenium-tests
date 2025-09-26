@@ -1,5 +1,7 @@
 package org.catalyte.io.pages;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 import java.time.Duration;
 import org.catalyte.io.utils.StringNormalizer;
 import org.openqa.selenium.By;
@@ -203,12 +205,12 @@ public class Page {
    * Helper to fix flaky accordions. Expand an accordion header whose panel is linked via
    * aria-controls, and wait until expanded.
    */
-  protected WebElement expandAccordionStable(WebElement headerEl, java.time.Duration timeout) {
+  protected WebElement expandAccordionStable(WebElement headerEl, Duration timeout) {
     String controlsId = headerEl.getAttribute("aria-controls");
     if (controlsId == null || controlsId.isBlank()) {
       throw new IllegalStateException("Accordion header missing aria-controls");
     }
-    org.openqa.selenium.By panelBy = org.openqa.selenium.By.id(controlsId.trim());
+    By panelBy = By.id(controlsId.trim());
 
     // If not expanded, click it (some themes toggle aria-expanded on header)
     String expanded = String.valueOf(headerEl.getAttribute("aria-expanded"));
@@ -217,10 +219,10 @@ public class Page {
     }
 
     // Wait for the panel to be visible and have non-zero height
-    org.openqa.selenium.support.ui.WebDriverWait localWait =
-        new org.openqa.selenium.support.ui.WebDriverWait(driver, timeout);
+    WebDriverWait localWait =
+        new WebDriverWait(driver, timeout);
     return localWait.until(d -> {
-      org.openqa.selenium.WebElement panel = d.findElement(panelBy);
+      WebElement panel = d.findElement(panelBy);
       boolean visible = panel.isDisplayed() && panel.getRect().height > 0;
       return visible ? panel : null;
     });
@@ -230,11 +232,11 @@ public class Page {
    * Expand via aria-controls, then wait until panel text contains expected (normalized)
    */
   protected boolean accordionTextEventuallyContains(WebElement headerEl, String expected,
-      java.time.Duration timeout) {
+      Duration timeout) {
     WebElement panel = expandAccordionStable(headerEl, timeout);
     String want = normalizer.normalize(expected);
     long end =
-        System.nanoTime() + java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(timeout.toMillis());
+        System.nanoTime() + MILLISECONDS.toNanos(timeout.toMillis());
     while (System.nanoTime() < end) {
       String got = normalizer.normalize(panel.getText());
       if (got.contains(want)) {
@@ -246,5 +248,13 @@ public class Page {
       }
     }
     return false;
+  }
+
+  //Confirm the driver model supports JavaScriptExecutor
+  protected JavascriptExecutor js() {
+    if (driver instanceof JavascriptExecutor) {
+      return (JavascriptExecutor) driver;
+    }
+    throw new IllegalStateException("Driver does not support JavascriptExecutor: " + driver);
   }
 }

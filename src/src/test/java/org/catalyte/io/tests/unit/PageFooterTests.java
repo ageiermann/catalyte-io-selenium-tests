@@ -13,7 +13,6 @@ import org.catalyte.io.utils.ButtonNavHelper;
 import org.catalyte.io.utils.LocatorMapper;
 import org.catalyte.io.utils.TestListener;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -108,18 +107,18 @@ public class PageFooterTests extends BaseUiTest {
         String menuLinkText = link.getText();
         logger.info("Testing nav menu link " + menuLinkText);
 
-        ((JavascriptExecutor) driver).executeScript("arguments[0].removeAttribute('target');",
+        jsHelper().executeScript("arguments[0].removeAttribute('target');",
             link);
         String before = driver.getCurrentUrl();
 
         // JS-click to avoid full-load waits
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", link);
+        jsHelper().executeScript("arguments[0].click();", link);
 
         boolean changed = footer.waitForUrlChangeOrHash(
             new WebDriverWait(driver, Duration.ofSeconds(10)), before, href);
         if (changed) {
           try {
-            ((JavascriptExecutor) driver).executeScript("window.stop();");
+            jsHelper().executeScript("window.stop();");
           } catch (Exception ignored) {
           }
         }

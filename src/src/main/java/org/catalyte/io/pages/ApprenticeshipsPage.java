@@ -6,7 +6,6 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -91,7 +90,7 @@ public class ApprenticeshipsPage extends Page {
   private WebElement findFaqHeaderByText(String question) {
     try {
       WebElement section = driver.findElement(FAQ_SECTION);
-      ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});",
+      js().executeScript("arguments[0].scrollIntoView({block:'center'});",
           section);
     } catch (NoSuchElementException ignored) {
     }
@@ -149,12 +148,12 @@ public class ApprenticeshipsPage extends Page {
         .findFirst()
         .orElseThrow(() -> new NoSuchElementException("No apprenticeship card titled: " + name));
 
-    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});",
+    js().executeScript("arguments[0].scrollIntoView({block:'center'});",
         link);
     try {
       link.click();
     } catch (ElementClickInterceptedException e) {
-      ((JavascriptExecutor) driver).executeScript("arguments[0].click();", link);
+      js().executeScript("arguments[0].click();", link);
     }
   }
 

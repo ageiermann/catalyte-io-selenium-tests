@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.catalyte.io.pages.Page;
 import org.catalyte.io.pages.PageFooter;
+import org.catalyte.io.pages.PageHeader;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.pagefactory.ByChained;
 
@@ -30,7 +32,7 @@ public class LocatorMapper {
       )
   );
 
-  private final Map<String, By> menus; // canonical heading -> container By
+  private Map<String, By> menus = Map.of(); // canonical heading -> container By
   StringNormalizer normalizer;
 
   public LocatorMapper(PageFooter footer) {
@@ -40,6 +42,11 @@ public class LocatorMapper {
         "services", footer.getPageFooterNavMenuServices(),
         "jobs", footer.getPageFooterNavMenuJobs()
     );
+    normalizer = new StringNormalizer();
+  }
+
+  public LocatorMapper(PageHeader header){
+    Objects.requireNonNull(header, "Header must not be null");
     normalizer = new StringNormalizer();
   }
 
